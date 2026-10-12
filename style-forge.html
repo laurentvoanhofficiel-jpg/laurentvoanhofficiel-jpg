@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0e">
+<title>Style Forge · Studio</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--bg:#0b0b0e;--card:#15151b;--card2:#1c1c24;--line:#2a2a34;--fg:#f2f0ea;--mut:#8d8c96;--acc:#ffb547;--acc-fg:#1a1100;--acc2:#ff5d73;--ok:#4ade80;--err:#ff6b6b;--r:14px;--rs:10px;--mono:ui-monospace,Menlo,Consolas,monospace;--hh:56px}
+html,body{background:var(--bg);color:var(--fg);overflow-x:hidden}
+body{font:15px/1.45 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,textarea,select{font:inherit;color:var(--fg);background:var(--card2);border:1px solid var(--line);border-radius:var(--rs);padding:10px 12px;width:100%;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--acc)}
+textarea{resize:vertical;min-height:64px;line-height:1.45}
+.mono{font-family:var(--mono);font-size:12px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:40;height:var(--hh);padding:0 14px;padding-top:env(safe-area-inset-top);display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(11,11,14,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+header h1{font-size:18px;letter-spacing:-.02em;font-weight:800}
+header h1 b{color:var(--acc)}
+.chip-s{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;background:var(--card2);font-size:12px;font-weight:700;color:var(--mut)}
+.chip-s i{width:8px;height:8px;border-radius:50%;background:var(--mut)}
+.chip-s.ok{color:var(--ok)}.chip-s.ok i{background:var(--ok)}
+.chip-s.bad{color:var(--err)}.chip-s.bad i{background:var(--err)}
+main{max-width:1200px;margin:0 auto;padding:12px 12px 20px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
+.panel>summary,.ph-head{padding:14px 16px;display:flex;align-items:center;gap:10px;font-weight:700;cursor:pointer;list-style:none;user-select:none}
+.panel>summary::-webkit-details-marker{display:none}
+.panel .num{width:24px;height:24px;border-radius:50%;background:var(--card2);display:inline-flex;align-items:center;justify-content:center;font-size:12px;color:var(--mut);flex-shrink:0}
+.panel.done .num{background:var(--ok);color:#06210f}
+.panel .sub{margin-left:auto;font-size:12px;color:var(--mut);font-weight:500;text-align:right}
+.pbody{padding:0 16px 16px}
+.lbl{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.07em;margin:14px 0 7px}
+.lbl:first-child{margin-top:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:var(--rs);background:var(--card2);border:1px solid var(--line);font-weight:700;font-size:14px;min-height:44px}
+.btn:active{transform:scale(.98)}
+.btn.pri{background:var(--acc);color:var(--acc-fg);border-color:var(--acc)}
+.btn.big{width:100%;min-height:56px;font-size:16px;border-radius:14px}
+.btn.sm{min-height:34px;padding:6px 12px;font-size:12px}
+.btn.dng{color:var(--err)}
+.btn:disabled{opacity:.45;pointer-events:none}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row>.grow{flex:1;min-width:0}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{padding:8px 13px;border-radius:99px;background:var(--card2);border:1px solid var(--line);font-size:13px;font-weight:600;color:var(--fg)}
+.seg button.on{background:var(--acc);border-color:var(--acc);color:var(--acc-fg)}
+.hint{font-size:12px;color:var(--mut);margin-top:6px}
+.keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.kc{display:inline-flex;align-items:center;gap:6px;padding:5px 6px 5px 10px;border-radius:8px;background:var(--card2);font:11px var(--mono);border:1px solid var(--line)}
+.kc em{font-style:normal;font-size:10px;font-weight:800;padding:2px 6px;border-radius:5px;background:#333}
+.kc.ok em{background:rgba(74,222,128,.18);color:var(--ok)}.kc.bad em{background:rgba(255,107,107,.18);color:var(--err)}.kc.cool em{background:rgba(255,181,71,.2);color:var(--acc)}
+.kc button{opacity:.55;padding:0 4px;font-size:14px}
+.warn{background:rgba(255,181,71,.1);border:1px solid rgba(255,181,71,.4);color:var(--acc);padding:10px 12px;border-radius:var(--rs);font-size:12.5px;margin-bottom:10px}
+.drops{display:grid;grid-template-columns:1fr;gap:10px}
+.drop{position:relative;border:1.5px dashed var(--line);border-radius:var(--r);min-height:120px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--mut);cursor:pointer;overflow:hidden;background:var(--card2)}
+.drop.has{border-style:solid;min-height:0;height:170px}
+.drop img{width:100%;height:100%;object-fit:cover}
+.drop .x{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff}
+.drop .tag{position:absolute;left:8px;bottom:8px;font-size:11px;font-weight:700;background:rgba(0,0,0,.65);padding:3px 8px;border-radius:99px}
+.strip{position:sticky;top:var(--hh);z-index:30;margin:0 -12px 10px;padding:8px 12px;display:flex;gap:6px;overflow-x:auto;background:rgba(11,11,14,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.strip button{flex-shrink:0;padding:7px 13px;border-radius:99px;background:var(--card2);border:1px solid var(--line);font-size:12.5px;font-weight:700;white-space:nowrap}
+.strip button.on{background:var(--fg);color:#111;border-color:var(--fg)}
+.strip button small{opacity:.6;font-weight:600;margin-left:4px}
+.strip .sep{width:1px;background:var(--line);flex-shrink:0;margin:0 2px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;align-items:start}
+@media(min-width:620px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:900px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1150px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.card{position:relative;aspect-ratio:var(--ar,3/4);border-radius:12px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer;content-visibility:auto;contain-intrinsic-size:auto 220px}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .25s}
+.card img.on{opacity:1}
+.card .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:10px;text-align:center;font-size:11.5px;color:var(--mut);background:linear-gradient(135deg,#17171e,#1e1e28)}
+.card.done .ph{display:none}
+.spin{width:22px;height:22px;border-radius:50%;border:2.5px solid var(--line);border-top-color:var(--acc);animation:sp 0.9s linear infinite}
+.card.error .spin,.card.cancel .spin,.card.concept .spin{animation:none;border-color:var(--line)}
+.card.queued .spin{animation-duration:2.4s}
+@keyframes sp{to{transform:rotate(360deg)}}
+.card .cl{position:absolute;left:0;right:0;bottom:0;padding:22px 9px 7px;font-size:11px;font-weight:700;background:linear-gradient(transparent,rgba(0,0,0,.82));pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card:not(.done) .cl{display:none}
+.card .cb{position:absolute;top:6px;left:6px;right:6px;display:flex;gap:4px;pointer-events:none}
+.card .cb span{font-size:11px;font-weight:800;padding:2px 7px;border-radius:99px;background:rgba(0,0,0,.62)}
+.card .cb .fv{margin-left:auto;color:var(--acc2)}
+.card .cb span:empty{display:none}
+.card.error .ph{color:var(--err)}
+.empty{text-align:center;padding:44px 20px;color:var(--mut)}
+.empty b{display:block;font-size:17px;color:var(--fg);margin-bottom:6px}
+#runbar{position:fixed;left:0;right:0;bottom:calc(60px + env(safe-area-inset-bottom));z-index:45;padding:8px 12px}
+#runbar .in{max-width:640px;margin:0 auto;background:#1d1d27;border:1px solid var(--line);border-radius:14px;padding:10px 12px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.bar{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin:8px 0 2px}
+.bar i{display:block;height:100%;background:var(--acc);width:0;transition:width .3s}
+#tabs{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;background:rgba(11,11,14,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+#tabs button{flex:1;padding:10px 0 9px;font-size:11px;font-weight:700;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px}
+#tabs button span{font-size:19px}
+#tabs button.on{color:var(--acc)}
+#viewer{position:fixed;inset:0;z-index:70;background:#050507;display:flex;flex-direction:column;touch-action:pan-y}
+.v-top{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 12px 8px}
+.v-top .t{flex:1;min-width:0;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v-top .t small{display:block;font-weight:500;color:var(--mut);font-size:11px}
+.ib{width:40px;height:40px;border-radius:50%;background:var(--card2);display:inline-flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.v-img{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.v-img img{max-width:100%;max-height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none}
+.v-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:64px;font-size:26px;color:#fff;background:rgba(0,0,0,.35);border-radius:12px}
+.v-kids{display:flex;gap:6px;overflow-x:auto;padding:8px 12px;scrollbar-width:none}
+.v-kids::-webkit-scrollbar{display:none}
+.v-kids .k{position:relative;flex-shrink:0;height:62px;border-radius:8px;overflow:hidden;background:var(--card);border:1px solid var(--line)}
+.v-kids .k img{height:100%;width:auto;display:block}
+.v-kids .k.cur{border-color:var(--acc)}
+.v-bar{display:flex;gap:8px;padding:8px 12px calc(12px + env(safe-area-inset-bottom));justify-content:space-between}
+.v-bar .btn{flex:1;flex-direction:column;gap:2px;font-size:11px;padding:8px 4px;min-height:54px}
+.v-bar .btn span{font-size:19px}
+#sheet{position:fixed;inset:0;z-index:90}
+.sh-bg{position:absolute;inset:0;background:rgba(0,0,0,.6)}
+.sh-box{position:absolute;left:0;right:0;bottom:0;max-height:92vh;max-width:760px;margin:0 auto;background:var(--card);border-radius:22px 22px 0 0;border:1px solid var(--line);display:flex;flex-direction:column;animation:up .22s ease}
+@keyframes up{from{transform:translateY(30px);opacity:0}}
+.sh-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px 10px;font-weight:800;font-size:16px}
+.sh-body{overflow-y:auto;padding:0 16px 16px;flex:1;-webkit-overflow-scrolling:touch}
+.sh-foot{padding:10px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+.ideas{display:flex;flex-direction:column;gap:6px}
+.idea{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:var(--rs);background:var(--card2);border:1px solid var(--line);cursor:pointer;text-align:left}
+.idea.on{border-color:var(--acc);background:rgba(255,181,71,.08)}
+.idea .ck{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--mut);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--acc-fg)}
+.idea.on .ck{background:var(--acc);border-color:var(--acc)}
+.idea b{display:block;font-size:13px}.idea small{color:var(--mut);font-size:11.5px}
+.shotg{display:flex;flex-wrap:wrap;gap:6px}
+.shotg button{padding:8px 12px;border-radius:99px;background:var(--card2);border:1px solid var(--line);font-size:12.5px;font-weight:600}
+.shotg button.on{background:var(--acc);border-color:var(--acc);color:var(--acc-fg)}
+.film{padding:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;cursor:pointer}
+.film h3{font-size:16px}.film p{color:var(--mut);font-size:13px;margin-top:3px}
+.scenes{display:flex;flex-direction:column;gap:10px}
+.scene{display:flex;align-items:flex-start;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:10px}
+.scene .th{position:relative;width:46%;max-width:300px;flex-shrink:0;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:var(--card2);cursor:pointer}
+.scene .th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.scene .th .sp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--mut)}
+.scene .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.scene .tx input{font-weight:700;padding:7px 9px}
+.scene .tx textarea{font-size:12.5px;min-height:70px;padding:7px 9px}
+.scene .th{align-self:flex-start}
+@media(max-width:560px){.scene{flex-direction:column}.scene .th{width:100%;max-width:none}.scene .tx{width:100%}}
+.tabs2{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
+.tabs2 button{padding:8px 14px;border-radius:99px;background:var(--card2);border:1px solid var(--line);font-weight:700;font-size:13px;white-space:nowrap}
+.tabs2 button.on{background:var(--fg);color:#111}
+.terr{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.terr input[type=checkbox]{width:20px;height:20px;accent-color:var(--acc);flex-shrink:0}
+.terr .n{flex:1;min-width:0}.terr small{display:block;color:var(--mut);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#toasts{position:fixed;left:0;right:0;top:calc(66px + env(safe-area-inset-top));z-index:120;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
+.toast{background:#23232d;border:1px solid var(--line);padding:10px 16px;border-radius:99px;font-size:13px;font-weight:600;box-shadow:0 6px 24px rgba(0,0,0,.5);max-width:92vw;animation:up .2s}
+.toast.err{border-color:var(--err);color:var(--err)}.toast.ok{border-color:var(--ok);color:var(--ok)}
+.pre{font:11.5px/1.5 var(--mono);white-space:pre-wrap;word-break:break-word;background:var(--card2);padding:10px;border-radius:var(--rs);max-height:260px;overflow:auto;color:#cfcdd6}
+.more{display:block;margin:14px auto}
+</style>
+</head>
+<body>
+<header>
+  <h1>Style<b>Forge</b></h1>
+  <div class="row"><span class="chip-s" id="storeChip" title="Stockage"><i></i><span>…</span></span><button class="chip-s" id="keyChip" data-act="goKeys"><i></i><span>0 clé</span></button></div>
+</header>
+<main>
+  <section id="v-studio">
+    <div id="warnBox"></div>
+    <details class="panel" id="pKeys" open>
+      <summary><span class="num">1</span> Clés API <span class="sub" id="keysSub">à ajouter</span></summary>
+      <div class="pbody">
+        <textarea id="keysIn" rows="3" spellcheck="false" autocomplete="off" placeholder="Colle tes clés ici : une par ligne, ou séparées par des espaces / virgules. Tout format est accepté."></textarea>
+        <div class="row" style="margin-top:8px"><button class="btn pri grow" data-act="addKeys">Ajouter &amp; tester</button><button class="btn" data-act="retestKeys">↻ Retester</button></div>
+        <div class="keys" id="keysList"></div>
+        <p class="hint" id="keysHint"></p>
+      </div>
+    </details>
+    <details class="panel" id="pPhoto" open>
+      <summary><span class="num">2</span> Photo de référence <span class="sub" id="photoSub">visage à conserver</span></summary>
+      <div class="pbody">
+        <div class="drops" id="drops"></div>
+        <p class="hint" id="photoHint">Le visage de cette personne restera identique sur toutes les images. Tout le reste change.</p>
+      </div>
+    </details>
+    <details class="panel" id="pCreate" open>
+      <summary><span class="num">3</span> Création <span class="sub" id="createSub"></span></summary>
+      <div class="pbody" id="createBody"></div>
+    </details>
+    <div id="gallery"></div>
+  </section>
+  <section id="v-films" class="hide"></section>
+  <section id="v-admin" class="hide"></section>
+</main>
+<div id="runbar" class="hide"></div>
+<nav id="tabs">
+  <button data-act="tab" data-v="studio" class="on"><span>🎞️</span>Studio</button>
+  <button data-act="tab" data-v="films"><span>🎬</span>Films</button>
+  <button data-act="tab" data-v="admin"><span>⚙️</span>Admin</button>
+</nav>
+<div id="viewer" class="hide"></div>
+<div id="sheet" class="hide"></div>
+<div id="toasts"></div>
+<input type="file" id="fileIn" accept="image/*" class="hide">
+<input type="file" id="importIn" accept="application/json" class="hide">
+<script>
+'use strict';
+/* ═════════════ OUTILS ═════════════ */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const uid=()=>Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-4);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const chunk=(a,n)=>{const o=[];for(let i=0;i<a.length;i+=n)o.push(a.slice(i,i+n));return o};
+const debounce=(f,ms)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>f(...a),ms)}};
+function toast(msg,type=''){const d=document.createElement('div');d.className='toast '+type;d.textContent=msg;$('#toasts').appendChild(d);setTimeout(()=>d.remove(),type==='err'?4500:2400)}
+function parseJson(t){if(!t)return null;let c=String(t).trim();const f=c.match(/```(?:json)?\s*([\s\S]*?)```/);if(f)c=f[1].trim();
+  const a=c.search(/[\[{]/);if(a<0)return null;c=c.slice(a);const e=Math.max(c.lastIndexOf(']'),c.lastIndexOf('}'));if(e>0)c=c.slice(0,e+1);
+  try{return JSON.parse(c)}catch(_){}
+  try{return JSON.parse(c.replace(/,\s*([\]}])/g,'$1').replace(/[\u0000-\u001f]+/g,' '))}catch(_){}
+  // réparation d'un tableau tronqué : on garde les objets complets
+  if(c[0]==='['){const out=[];let d=0,s=-1,q=false,x=false;for(let i=0;i<c.length;i++){const ch=c[i];if(x){x=false;continue}if(ch==='\\'){x=true;continue}if(ch==='"'){q=!q;continue}if(q)continue;if(ch==='{'){if(d===0)s=i;d++}else if(ch==='}'){d--;if(d===0&&s>=0){try{out.push(JSON.parse(c.slice(s,i+1)))}catch(_){}s=-1}}}return out.length?out:null}
+  return null}
+
+/* ═════════════ STOCKAGE ROBUSTE (localStorage + IndexedDB + mémoire) ═════════════ */
+const IDB={db:null,
+  open(){return new Promise(res=>{try{const r=indexedDB.open('styleforge8',1);
+    r.onupgradeneeded=()=>{const d=r.result;d.createObjectStore('kv');d.createObjectStore('items',{keyPath:'id'});d.createObjectStore('thumbs')};
+    r.onsuccess=()=>{this.db=r.result;res(true)};r.onerror=()=>res(false);r.onblocked=()=>res(false)}catch(e){res(false)}})},
+  _r(q){return new Promise((ok,ko)=>{q.onsuccess=()=>ok(q.result);q.onerror=()=>ko(q.error)})},
+  st(n,m){return this.db.transaction(n,m||'readonly').objectStore(n)},
+  async get(s,k){if(!this.db)return;try{return await this._r(this.st(s).get(k))}catch(e){}},
+  async put(s,v,k){if(!this.db)return false;try{await this._r(k===undefined?this.st(s,'readwrite').put(v):this.st(s,'readwrite').put(v,k));return true}catch(e){return false}},
+  async del(s,k){if(!this.db)return;try{await this._r(this.st(s,'readwrite').delete(k))}catch(e){}},
+  async all(s){if(!this.db)return[];try{return await this._r(this.st(s).getAll())}catch(e){return[]}},
+  async keys(s){if(!this.db)return[];try{return await this._r(this.st(s).getAllKeys())}catch(e){return[]}},
+  async clear(s){if(!this.db)return;try{await this._r(this.st(s,'readwrite').clear())}catch(e){}}};
+const BIG=new Set(['ref','ref2']);
+const KV={cache:{},ls:false,
+  async init(){await IDB.open();
+    if(IDB.db){for(const k of await IDB.keys('kv'))this.cache[k]=await IDB.get('kv',k)}
+    try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.indexOf('sf8_')===0){const n=k.slice(4);if(!(n in this.cache))this.cache[n]=JSON.parse(localStorage.getItem(k))}}}catch(e){}
+    try{localStorage.setItem('sf8__t','1');this.ls=localStorage.getItem('sf8__t')==='1';localStorage.removeItem('sf8__t')}catch(e){this.ls=false}},
+  get(k,d){return k in this.cache?this.cache[k]:d},
+  set(k,v){this.cache[k]=v;
+    if(this.ls&&!(BIG.has(k)&&IDB.db)){try{localStorage.setItem('sf8_'+k,JSON.stringify(v))}catch(e){}}
+    if(IDB.db)IDB.put('kv',v,k)},
+  del(k){delete this.cache[k];try{localStorage.removeItem('sf8_'+k)}catch(e){}IDB.del('kv',k)},
+  ok(){return this.ls||!!IDB.db}};
+
+/* ═════════════ CONFIG API ═════════════ */
+const API='https://apihub.agnes-ai.com/v1',M_TEXT='agnes-2.5-flash',M_IMG='agnes-image-2.1-flash';
+
+/* ═════════════ BASE DE STYLES ("territoires") ═════════════ */
+const CATS={cine:['🎬','Cinéma'],poster:['🖼️','Affiches'],art:['🎨','Art & Peinture'],anim:['🌸','Anim & BD'],retro:['📼','Époques'],action:['🥋','Action & Sport'],sf:['🚀','SF & Fantasy'],photo:['📸','Photo & Mode'],digi:['👾','Numérique'],odd:['🌀','Insolite']};
+const TERR=[
+['cine','Kung-fu 70s Hong Kong','1970s Hong Kong kung fu film still, Shaw Brothers look, grainy film stock, sudden zoom, dojo courtyard or bamboo forest'],
+['cine','Western spaghetti','Spaghetti western film still, Leone extreme close-up, dusty desert town, harsh sun, anamorphic widescreen'],
+['cine','Film noir 40s','Black-and-white 1940s film noir, venetian-blind shadows, rain-slick street, cigarette smoke, trench coat'],
+['cine','Giallo italien','1970s Italian giallo thriller, saturated red and blue gel lighting, stylish suspense, art-house poster feel'],
+['cine','Blaxploitation','1970s blaxploitation film still, funky wide-collar fashion, gritty city, groovy orange palette, wah-wah attitude'],
+['cine','Nouvelle Vague','1960s French New Wave, Paris streets, black-and-white, effortless cool, handheld camera, jump-cut energy'],
+['cine','SF néo-noir 80s','1980s neo-noir sci-fi, neon rain, smoke and shafts of light, practical effects look, dystopian megacity'],
+['cine','Film catastrophe 70s','1970s disaster movie still, panic and drama, burning skyscraper, orange glow, ensemble poster energy'],
+['cine','Thriller coréen','Korean crime thriller, cold teal palette, rain, razor-precise composition, tense stillness'],
+['cine','Péplum technicolor','1950s Hollywood sword-and-sandal epic, golden armor, marble palace, saturated Technicolor, matte painting sky'],
+['cine','Expressionnisme muet','German expressionist silent film, distorted angles, painted shadows, extreme contrast black-and-white, 1920s'],
+['cine','Bollywood 80s','1980s Bollywood film still, saturated colors, dance number, sequins, dramatic mountain backdrop'],
+['cine','Symétrie pastel','Symmetrical pastel storybook cinematography, deadpan characters, retro grand hotel, flat centered framing'],
+['cine','Cyberpunk Tokyo','Cyberpunk Tokyo night, neon signs in kanji, holographic ads, rain, steam from vents, dense vertical city'],
+['cine','Comédie romantique','Warm romantic comedy still, golden hour city, cozy knitwear, soft focus, café windows'],
+['cine','Horreur gothique Hammer','1960s gothic horror, candlelit crypt, drifting fog, velvet cape, saturated blood-red accents'],
+['cine','Road movie 70s','1970s American road movie, endless dusty highway, vintage muscle car, Kodachrome warmth, lens flare'],
+['cine','Film de samouraï','Kurosawa-style samurai film, black-and-white, wind in tall grass, rain, katana, epic wide shots'],
+['cine','Post-apo désert','Post-apocalyptic wasteland film, scavenged armor, dust storm, convoy of improvised vehicles, orange and teal grade'],
+['cine','Film de braquage 70s','1970s heist movie, sharp suit, bank vault, split-screen feel, jazzy cool, grainy realism'],
+['cine','Film de guerre froide','Cold War spy thriller, grey Berlin, trench coats, surveillance photos, desaturated palette, 1960s'],
+['cine','Comédie musicale MGM','Golden-age MGM musical, giant painted sets, tap dancing, glittering costumes, saturated Technicolor'],
+['poster','Affiche punk DIY','DIY punk gig poster, photocopied collage, cut-out ransom-note letters, safety pins, neon pink and black, xerox grain'],
+['poster','Constructivisme soviétique','Soviet constructivist poster style, bold red diagonals, heroic angular figure, photomontage, flat geometric shapes'],
+['poster','Affiche polonaise','Polish surreal cinema poster, hand-painted symbolic imagery, muted palette, unsettling metaphor'],
+['poster','Art nouveau Mucha','Art Nouveau poster in the manner of Mucha, ornate floral halo, flowing hair lines, gold decorative border'],
+['poster','Pulp magazine 50s','1950s pulp magazine cover, lurid painted illustration, dramatic peril, bold title lettering'],
+['poster','Psychédélique 1967','1967 psychedelic concert poster, melting hand-lettering, vibrating complementary colors, swirling patterns'],
+['poster','Affiche peinte indienne','Hand-painted Indian cinema billboard, gigantic faces, saturated gouache, theatrical drama'],
+['poster','Style suisse','Swiss International Typographic poster, strict grid, bold sans-serif, minimal geometric shapes, one flat accent color'],
+['poster','Pochette jazz 60s','1960s jazz record cover, duotone photo, bold sans typography, cool blue and black, smoky club'],
+['poster','Affiche rétro-voyage','Vintage travel poster, flat gouache shapes, sun-bleached colors, exotic destination, art-deco lettering'],
+['art','Renaissance italienne','Italian Renaissance oil portrait, sfumato, chiaroscuro, velvet doublet, craquelure, landscape behind'],
+['art','Baroque Caravaggio','Baroque tenebrism, dramatic spotlight in total darkness, lace and satin, theatrical gesture'],
+['art','Ukiyo-e','Japanese ukiyo-e woodblock print, flat color areas, bold outlines, wave and cloud patterns, paper grain'],
+['art','Pop art Warhol','Pop art silkscreen, halftone dots, flat clashing colors, repeated panels, glossy mass-media look'],
+['art','Cubisme','Cubist painting, fragmented planes, multiple viewpoints at once, ochre and grey palette'],
+['art','Art déco Lempicka','Art Deco 1920s luxury painting, sleek metallic curves, gold geometry, glamorous elegance'],
+['art','Vitrail gothique','Stained glass window, thick black lead lines, jewel-tone panes, cathedral light'],
+['art','Mosaïque byzantine','Byzantine gold mosaic, tiny tesserae, solemn halo, flat sacred composition'],
+['art','Fauvisme','Fauvism, wild pure unmixed colors, flat patterned interior, bold brushstrokes'],
+['art','Surréalisme','Surrealist painting, melting clocks and impossible architecture, dream logic, hyper-smooth oil'],
+['art','Aquarelle libre','Loose watercolor illustration, wet-on-wet bleeding colors, paper texture, white spaces'],
+['art','Marbre grec','Carved white marble Greek sculpture, museum lighting, drapery folds, classical contrapposto'],
+['art','Gravure ancienne','Etching and engraving, fine crosshatching, antique book plate, sepia ink on cream paper'],
+['anim','Ghibli','Hand-painted Studio Ghibli-style anime, lush skies, gentle wind, nostalgic warmth'],
+['anim','Manga shonen','Shonen manga action page, speed lines, bold ink, screentone, extreme dynamic angle'],
+['anim','Manga seinen noir','Gritty seinen manga, heavy blacks, detailed crosshatching, realistic anatomy, urban despair'],
+['anim','Ligne claire BD','Franco-Belgian comic, ligne claire, flat colors, precise outlines, adventure vibe'],
+['anim','Comics Golden Age','Golden Age American comic, Ben-Day dots, bold primary colors, caped hero, punchy onomatopoeia'],
+['anim','Cartoon années 30','1930s rubber-hose black-and-white cartoon, bouncy limbs, vintage film scratches'],
+['anim','3D animation douce','Stylized soft 3D animated feature look, subsurface skin, warm cinematic lighting, expressive eyes'],
+['anim','Anime cyber 90s','1990s cel anime, VHS softness, mecha city, glowing HUD, moody synth palette'],
+['anim','Stop-motion argile','Claymation stop-motion puppet, visible fingerprints, miniature handmade set, warm practical lights'],
+['retro','Années folles','1920s jazz age, Art Deco ballroom, champagne towers, feathered headbands, sepia-gold glow'],
+['retro','Rockabilly 50s','1950s diner, chrome and pastel Technicolor, jukebox, poodle skirts and pompadours'],
+['retro','Flower power 60s','1960s Summer of Love, tie-dye, painted VW van, daisies, hazy sun'],
+['retro','Disco 70s','1970s disco, mirror ball, polyester, warm orange Kodachrome, dance floor glow'],
+['retro','Néon 80s','1980s Memphis design, neon geometry, arcade, VHS grain, big shoulder pads'],
+['retro','Grunge 90s','1990s grunge, flannel and boots, disposable camera flash, muted greens, garage band'],
+['retro','Steampunk','Steampunk, brass goggles, riveted airship deck, Victorian tailoring, copper steam'],
+['retro','Belle Époque Paris','1900 Paris, Eiffel scaffolding, café terrace, Toulouse-Lautrec poster colors, gaslight'],
+['retro','Riviera 60s','1960s French Riviera holiday, Kodak slide colors, striped awnings, sports car, sunglasses'],
+['retro','Swinging London','1966 Swinging London, mod fashion, op-art patterns, Carnaby Street, scooters'],
+['action','Duel de samouraïs','Samurai duel, katana clash with sparks, cherry blossom storm, feudal castle'],
+['action','Ninja nocturne','Stealth ninja on moonlit rooftop, black outfit, smoke bombs, tiled roofs, blue night'],
+['action','Pilote de F1','Formula-1 driver, race suit and helmet, motion blur, pit-lane, sponsor-free overalls'],
+['action','Surf géant','Big-wave surfer in the barrel, spray, tropical sunset, dramatic wall of water'],
+['action','Gladiateur','Roman gladiator in the arena, bronze armor, roaring crowd, golden sand, low sun'],
+['action','Pilote de chasse','Fighter pilot in cockpit, oxygen mask, contrails, glowing instruments, sunrise above clouds'],
+['action','Alpiniste','High-altitude mountaineer, ice axe, storm clouds, frozen beard, summit ridge, wind-blown snow'],
+['action','Pirate','Swashbuckling pirate captain on a stormy deck, tricorn hat, cannon smoke, lightning, wooden ship'],
+['action','Boxeur','Boxing champion portrait, wrapped hands, sweat, ring ropes, cigarette-smoke spotlights, 1970s'],
+['action','Tai-chi brumeux','Tai-chi master on a misty mountain terrace, flowing silk, pine trees, soft dawn'],
+['sf','Astronaute rétro','Retro 1960s astronaut, bulky white suit, lunar dust, Earth rising, hand-tinted photo'],
+['sf','Space opera','Space opera hero in ornate alien bazaar, practical creature costumes, smoky light, twin suns'],
+['sf','Afrofuturisme','Afrofuturism, gold and kente-inspired armor, cosmic city, radiant geometry, royal posture'],
+['sf','Solarpunk','Solarpunk utopia, vertical gardens, white curved architecture, sunlight through leaves, hopeful'],
+['sf','Fantasy elfique','High-fantasy elven noble, ancient forest, luminous mist, intricate silver leaf armor'],
+['sf','Dark fantasy','Dark fantasy knight, ruined cathedral, ash falling, rusted armor, one shaft of light'],
+['sf','Viking','Viking chieftain on a fjord, fur cloak, longship fleet, grey dawn, braided hair'],
+['sf','Égypte ancienne','Ancient Egypt pharaonic splendor, gold collar, painted hieroglyph walls, desert temple, torchlight'],
+['sf','Atlantide','Underwater lost city of Atlantis, bioluminescent coral architecture, floating silks, caustic light'],
+['sf','Dieselpunk','Dieselpunk 1930s, riveted machines, goggles, zeppelin docks, smoke and brass, art-deco skyline'],
+['photo','Portrait Vogue studio','High-fashion editorial studio portrait, couture, hard flash, seamless colored backdrop, 85mm'],
+['photo','Photo de rue 35mm','Candid street photography, 35mm film, bustling market, harsh shadows, decisive moment'],
+['photo','Polaroïd','Instant-film Polaroid snapshot, soft chemical colors, white border, light leaks, nostalgic'],
+['photo','Noir & blanc argentique','Classic silver-gelatin black-and-white portrait, deep blacks, visible grain, window light'],
+['photo','Mode 90s','1990s fashion editorial, minimalist, flash-lit, washed-out colors, supermodel energy'],
+['photo','Photo de famille 70s','1970s family snapshot, faded orange colors, wood paneling, cheap flash, candid smiles'],
+['photo','Autochrome 1910','Autochrome Lumière 1910, pointillist color grain, pastel dreamy tones, formal pose'],
+['digi','Pixel 16-bit','16-bit pixel art sprite scene, SNES-era palette, chunky pixels, parallax city'],
+['digi','Low poly','Low-poly 3D, faceted geometry, flat shading, pastel indie-game look'],
+['digi','Vaporwave','Vaporwave, pink and cyan gradient, marble bust, palm trees, VHS glitch, grid horizon'],
+['digi','Synthwave','Synthwave, chrome sun, magenta-cyan neon grid, retro-futurist convertible, 1985 airbrush'],
+['digi','Jeu PS1','Low-res PS1-era 3D game screenshot, warped textures, polygon jitter, foggy draw distance'],
+['digi','Voxel','Voxel art, Minecraft-like cubes, isometric diorama, soft shadows'],
+['digi','Glitch art','Datamosh glitch art, RGB split, scanline tearing, corrupted pixels, cyber haze'],
+['odd','Enluminure médiévale','Medieval illuminated manuscript, gold leaf, flat saints, tiny ornate borders, parchment'],
+['odd','Carte de tarot','Ornate tarot card, symbolic border, mystical emblems, art-nouveau linework, card title banner'],
+['odd','Tapisserie','Woven medieval tapestry, wool texture, millefleurs background, muted natural dyes'],
+['odd','Origami / papier découpé','Layered paper-cut diorama, origami folds, soft shadows between layers, pastel paper'],
+['odd','Broderie','Embroidered textile portrait, visible stitches, thread colors, linen background'],
+['odd','Manuel scolaire 60s','1960s school textbook illustration, flat gouache, educational diagram feel, limited palette'],
+['odd','Étiquette de conserve','Vintage tin-can label design, bold lettering frame, flat illustration, sun-faded print'],
+['odd','Blueprint','Technical blueprint drawing, cyanotype blue, white construction lines, annotations, grid paper'],
+['odd','Papier peint toile de Jouy','Toile de Jouy wallpaper pattern, single-color engraved scenes, repeating pastoral vignettes']
+];
+const WARD=['sequined jumpsuit','oversized tweed overcoat','embroidered silk kimono','leather biker jacket covered in patches','hand-knitted fisherman sweater','pinstripe three-piece suit','tracksuit with retro stripes','velvet smoking jacket','crumpled linen safari suit','cyber visor and holographic raincoat','tattered pirate coat','crisp white lab coat','ornate brocade robe','denim-on-denim with studded collar','hooded monk habit','quilted ski suit','vintage bellhop uniform','floral Hawaiian shirt and straw hat','military dress uniform with medals','tuxedo with a bright red cummerbund','poncho and wide-brim hat','armored breastplate with cape','mechanic overalls smeared with oil','feathered carnival costume','long fur-trimmed coat and ushanka','three-stripe nylon windbreaker','flowing desert robes and turban','punk jacket with safety pins and spiked hair','pastel suit with bow tie','astronaut suit with scuffed patches'];
+const SETT=['rain-soaked neon alley','sun-baked desert gas station','grand marble ballroom','overgrown greenhouse','Moroccan rooftop at dusk','snowy mountain pass','submarine control room','abandoned cinema','crowded night market','minimalist white gallery','candlelit medieval hall','vintage train compartment','coastal cliff in a storm','roller-disco rink','jazz club with smoke','rice terraces at dawn','retro-futuristic space station','paper-lantern festival street','old printing press workshop','circus tent interior','foggy harbor with cranes','Brutalist concrete plaza','flooded library','cherry-blossom temple garden','neon-lit arcade'];
+const POSE=['walking toward camera in slow motion','leaning on a wall, arms crossed','laughing out loud mid-gesture','looking back over the shoulder','mid-leap in the air','sitting on the floor deep in thought','pointing at something off-screen','standing in heroic stance, low angle','holding a prop that matters to the story','caught mid-stride in the crowd','silhouetted in a doorway','dancing with arms raised','reading a letter in dramatic light','squinting into the sun'];
+const CAM=['extreme close-up','wide establishing shot','low-angle hero shot','overhead top-down shot','Dutch tilt','over-the-shoulder','medium shot with shallow depth of field','fisheye wide','long-lens compression','symmetrical centered framing'];
+const LIGHT=['golden hour backlight','hard noon sun','candlelight','neon magenta and cyan','overcast soft light','single spotlight in darkness','moonlit blue','sodium-vapor orange streetlights','stage footlights','lightning flashes'];
+const PROPS=['an antique telescope','a glowing lantern','a vintage camera','a rolled-up map','a parrot on the shoulder','a cracked mirror','a violin case','a briefcase full of paper stars','a transistor radio','an umbrella made of feathers','a giant key','a paper crane'];
+const WILD=[].concat(WARD,SETT,PROPS);
+
+/* ═════════════ RÉGLAGES ADMIN ═════════════ */
+const DEF={
+ face:'IDENTITY LOCK: the person in the image must be the exact same individual as in the reference photo — identical face, facial structure, skin tone and apparent age. Instantly recognizable.',
+ free:'Everything except the face must change radically and creatively: outfit, hairstyle, headwear, accessories, pose, setting, era, medium.',
+ exprs:{libre:'',smile:'Warm natural smile, friendly.',neutral:'Calm neutral expression.',intense:'Intense cinematic expression, strong gaze.'},
+ woman:'ALSO IN THE SCENE: {{DESC}}, interacting naturally with the main person.',
+ man:'ALSO IN THE SCENE: {{DESC}}, interacting naturally with the main person.',
+ text:'The text "{{TEXT}}" is clearly legible and naturally integrated into the scene (clothing, sign, poster or banner).',
+ qual:'Highly detailed, professional quality, no watermark, no signature.',
+ sys:'You are a visionary creative director for a cinematic image generator. The SAME real person appears in every image (their face is locked automatically) — your job is to make EVERYTHING ELSE wildly different between images so the user gets a visual shock: unexpected outfits, eras, places, camera angles, color palettes. Never repeat an outfit type, location type, camera angle or palette. Avoid clichés; be specific, culturally precise, bold and surprising.',
+ womanCustom:'',manCustom:'',
+ womanEth:['European','African','East Asian','South Asian','Middle-Eastern','Latina','Mixed-heritage','Caribbean'],
+ womanHair:['blonde','brunette','jet-black','red','auburn','platinum','chestnut','silver','curly black','long braided'],
+ manEth:['European','African','East Asian','South Asian','Middle-Eastern','Latino','Mixed-heritage','Caribbean'],
+ manLook:['short dark hair','bald','salt-and-pepper beard','curly hair','slicked-back hair','long hair','clean-shaven','thick mustache'],
+ disabled:[],custom:[]};
+let ADM=JSON.parse(JSON.stringify(DEF));
+function loadAdmin(){const a=KV.get('admin',{});ADM=Object.assign(JSON.parse(JSON.stringify(DEF)),a);ADM.exprs=Object.assign({},DEF.exprs,a.exprs||{})}
+const saveAdmin=()=>KV.set('admin',ADM);
+function allTerr(){return TERR.map((t,i)=>({id:'b'+i,cat:t[0],name:t[1],prompt:t[2]})).concat(ADM.custom||[])}
+function womanDesc(){if(ADM.womanCustom.trim())return ADM.womanCustom.trim();return `a striking woman, ${pick(ADM.womanEth)} features, ${pick(ADM.womanHair)} hair, elegant`}
+function manDesc(){if(ADM.manCustom.trim())return ADM.manCustom.trim();return `a charismatic man, ${pick(ADM.manEth)} features, ${pick(ADM.manLook)}`}
+
+/* ═════════════ ÉTAT ═════════════ */
+const CFG0={n:40,ratio:'3:4',comp:'none',variety:'bold',size:'1K',expr:'libre',textOn:false,text:'',workers:0,shotRatio:'16:9',cats:null};
+const S={cfg:Object.assign({},CFG0),ref:null,ref2:null,analysis:'',analysis2:'',items:[],byId:new Map(),batches:[],films:[],used:{},active:null,filter:'batch',limit:60,view:'studio',filmOpen:null};
+const byId=id=>S.byId.get(id);
+const saveCfg=()=>KV.set('cfg',S.cfg);
+const saveBatches=()=>KV.set('batches',S.batches);
+const saveFilms=()=>KV.set('films',S.films);
+const saveUsed=()=>KV.set('used',S.used);
+const _sv=new Map();
+function save(it){clearTimeout(_sv.get(it.id));_sv.set(it.id,setTimeout(()=>{_sv.delete(it.id);IDB.put('items',it)},120))}
+function addItem(it){S.items.push(it);S.byId.set(it.id,it);save(it)}
+function newItem(o){return Object.assign({id:uid(),batchId:null,parentId:null,kind:'main',title:'',cat:'odd',ratio:'3:4',size:'1K',prompt:'',scene:'',url:'',status:'concept',err:'',fav:false,thumb:false,t:Date.now(),refMode:'face',srcId:null},o)}
+const rootOf=it=>it.parentId?(byId(it.parentId)||it):it;
+const kidsOf=id=>S.items.filter(x=>x.parentId===id&&x.kind!=='scene'&&x.status!=='cancel');
+
+/* ═════════════ POOL DE CLÉS ═════════════ */
+const Pool={list:[],
+  load(){this.list=KV.get('keys',[]).map(k=>this.list.find(x=>x.key===k)||{key:k,st:'new',cool:0,last:{img:0,txt:0},n:0,err:0})},
+  save(){KV.set('keys',this.list.map(k=>k.key))},
+  parse(txt){return[...new Set(String(txt).split(/[\s,;]+/).map(s=>s.replace(/^["'`<(\[]+|["'`>)\],]+$/g,'').replace(/^bearer/i,'').trim()).filter(s=>s.length>=8))]},
+  add(keys){let n=0;for(const k of keys)if(!this.list.some(x=>x.key===k)){this.list.push({key:k,st:'new',cool:0,last:{img:0,txt:0},n:0,err:0});n++}this.save();return n},
+  usable(){return this.list.filter(k=>k.st!=='bad')},
+  ready(){const n=Date.now();return this.usable().filter(k=>k.cool<=n)},
+  changed:debounce(()=>{renderKeys();updateHeader();renderCreate()},250),
+  async acquire(kind,interval,sig){const t0=Date.now();
+    for(;;){if(sig.aborted)throw new Error('Arrêté');const now=Date.now();
+      const c=this.usable().filter(k=>k.cool<=now&&k.last[kind]+interval<=now);
+      if(c.length){c.sort((a,b)=>a.last[kind]-b.last[kind]||a.n-b.n);const k=c[0];k.last[kind]=now;k.n++;return k}
+      if(!this.usable().length)throw new Error('Aucune clé valide');
+      if(now-t0>150000)throw new Error("Clés saturées (délai dépassé)");
+      await sleep(150)}}};
+async function testKey(k){k.st='testing';Pool.changed();
+  try{const r=await fetch(API+'/chat/completions',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+k.key},body:JSON.stringify({model:M_TEXT,messages:[{role:'user',content:'ok'}],max_tokens:4})});
+    if(r.ok)k.st='ok';else if(r.status===401||r.status===403)k.st='bad';else if(r.status===429){k.st='ok';k.cool=Date.now()+30000}else k.st='new'}
+  catch(e){k.st='new';k.note='réseau'}
+  Pool.changed()}
+
+/* ═════════════ APPELS API ═════════════ */
+const Q={jobs:[],run:0,ctrl:new AbortController(),paused:false,times:[]};
+async function api(path,body,{kind='img',interval=3000,tries=5}={}){
+  const sig=Q.ctrl.signal;let last;
+  for(let a=0;a<tries;a++){
+    const k=await Pool.acquire(kind,interval,sig);let r;
+    try{r=await fetch(API+path,{method:'POST',signal:sig,headers:{'Content-Type':'application/json',Authorization:'Bearer '+k.key},body:JSON.stringify(body)})}
+    catch(e){if(sig.aborted)throw new Error('Arrêté');last=e;await sleep(800+a*700);continue}
+    if(r.ok){k.err=0;if(k.st==='new'){k.st='ok';Pool.changed()}try{return await r.json()}catch(e){last=e;continue}}
+    const txt=(await r.text().catch(()=>'')).slice(0,240);const err=new Error('HTTP '+r.status+' '+txt);err.status=r.status;last=err;
+    if(r.status===401||r.status===403){if(++k.err>=2){k.st='bad';Pool.changed()}continue}
+    if(r.status===429){const ra=+r.headers.get('retry-after');k.cool=Date.now()+(ra?ra*1000:45000);Pool.changed();continue}
+    if(r.status>=500||r.status===408){await sleep(1500+a*1200);continue}
+    throw err}
+  throw last||new Error('Échec API')}
+const imgInterval=size=>size==='2K'?12500:3100;
+async function genImage(prompt,{size='1K',ratio='3:4',refs=[],faceNeeded=true}={}){
+  const body={model:M_IMG,prompt:String(prompt).slice(0,1900),n:1,size,ratio,extra_body:{response_format:'url'}};
+  if(refs.length)body.image=refs;
+  let d;
+  try{d=await api('/images/generations',body,{kind:'img',interval:imgInterval(size)})}
+  catch(e){
+    if(e.status===400&&refs.length>1){body.image=refs.slice(0,1);try{d=await api('/images/generations',body,{kind:'img',interval:imgInterval(size)})}catch(e2){if(e2.status===400&&!faceNeeded){delete body.image;d=await api('/images/generations',body,{kind:'img',interval:imgInterval(size)})}else throw e2}}
+    else if(e.status===400&&refs.length&&!faceNeeded){delete body.image;d=await api('/images/generations',body,{kind:'img',interval:imgInterval(size)})}
+    else throw e}
+  const it=d&&d.data&&d.data[0];if(!it)throw new Error("Pas d'image reçue");
+  if(it.url)return it.url;if(it.b64_json)return 'data:image/png;base64,'+it.b64_json;throw new Error('Format inconnu')}
+async function callText(messages,{max=1500,temp=0.9}={}){
+  const d=await api('/chat/completions',{model:M_TEXT,messages,temperature:temp,max_tokens:max,reasoning_effort:'none',chat_template_kwargs:{enable_thinking:false}},{kind:'txt',interval:4500,tries:3});
+  const m=d.choices&&d.choices[0]&&d.choices[0].message;return(m&&(m.content||m.reasoning_content))||''}
+
+/* ═════════════ MOTEUR DE VARIÉTÉ ═════════════ */
+function pickTerritories(n){
+  const dis=new Set(ADM.disabled),on=S.cfg.cats;
+  let pool=allTerr().filter(t=>!dis.has(t.id)&&(!on||on.includes(t.cat)));
+  if(!pool.length)pool=allTerr();
+  let fresh=pool.filter(t=>!S.used[t.id]);
+  if(fresh.length<n){pool.forEach(t=>delete S.used[t.id]);fresh=pool.slice()}
+  const by={};shuffle(fresh).forEach(t=>(by[t.cat]=by[t.cat]||[]).push(t));
+  const cats=shuffle(Object.keys(by)),out=[];
+  while(out.length<n&&cats.some(c=>by[c].length)){for(const c of cats){if(out.length>=n)break;const t=by[c].pop();if(t)out.push(t)}}
+  while(out.length<n)out.push(pick(pool));
+  out.forEach(t=>{S.used[t.id]=1});saveUsed();
+  let res=out;
+  if(S.cfg.variety==='shock'){
+    res=out.map(a=>{if(Math.random()>0.45)return a;const b=pick(pool.filter(x=>x.cat!==a.cat))||pick(pool);
+      return{id:a.id+'+'+b.id,cat:a.cat,name:a.name+' × '+b.name,prompt:('Fusion of two worlds — '+a.prompt.slice(0,190)+' COMBINED WITH '+b.prompt.slice(0,190))}})}
+  return shuffle(res)}
+function localScene(){return[pick(WARD),pick(POSE),'in '+pick(SETT),pick(CAM),pick(LIGHT)].join('; ')}
+function compFor(){const c=S.cfg.comp;if(c==='mix'){const r=Math.random();return r<.4?'none':r<.7?'woman':'man'}return c}
+function compText(c){if(c==='woman')return ADM.woman.replace('{{DESC}}',womanDesc());if(c==='man')return ADM.man.replace('{{DESC}}',manDesc());
+  if(c==='ref2')return 'TWO PEOPLE: the first reference photo is person A (main), the second reference photo is person B; both must keep faces identical to their own reference, interacting naturally.';return''}
+function buildMain(it){
+  const P=[ADM.face,ADM.free],ex=ADM.exprs[S.cfg.expr];if(ex)P.push(ex);
+  P.push('STYLE/GENRE: '+it.tprompt+'.');P.push('SCENE: '+it.scene+'.');
+  const ct=compText(it.comp);if(ct)P.push(ct);
+  if(S.cfg.textOn&&S.cfg.text.trim())P.push(ADM.text.replace('{{TEXT}}',S.cfg.text.trim()));
+  P.push(ADM.qual);return P.join(' ').slice(0,1900)}
+async function makeConcepts(list){
+  const avoid=S.items.filter(i=>i.kind==='main'&&i.scene).slice(-45).map(i=>i.title);
+  const wild=S.cfg.variety==='classic'?0:S.cfg.variety==='bold'?1:2;
+  const lines=list.map((it,i)=>{it._wild=wild?shuffle(WILD).slice(0,wild):[];
+    return `#${i+1} ${it.terr} — ${it.tprompt.slice(0,250)}`+(it._wild.length?` | MUST INCLUDE: ${it._wild.join('; ')}`:'')+(it.comp==='woman'?' | A WOMAN ALSO IN SCENE':it.comp==='man'?' | A MAN ALSO IN SCENE':it.comp==='ref2'?' | A SECOND REAL PERSON ALSO IN SCENE':'')+(it.avoid?` | MUST BE VERY DIFFERENT FROM: ${it.avoid.slice(0,150)}`:'')}).join('\n');
+  const user=`${S.analysis?'MAIN SUBJECT (face locked automatically): '+S.analysis+'\n':''}Titles already used (never repeat): ${avoid.join(', ')||'none'}\n\nFor EACH numbered territory, invent ONE concrete, surprising scene. Return ONLY a JSON array: [{"i":1,"title":"short evocative French title, max 5 words","scene":"English, 40-60 words: exact outfit (garments, fabrics, colors), hairstyle or headwear, accessories, pose/action, precise location and decor, lighting, camera angle and lens, color palette"}]\n\n${lines}`;
+  let arr=null;
+  try{const txt=await callText([{role:'system',content:ADM.sys},{role:'user',content:user}],{max:Math.min(3900,list.length*240+300),temp:0.95});arr=parseJson(txt)}catch(e){if(/Arrêté/.test(e.message))throw e}
+  if(!Array.isArray(arr))arr=[];
+  return list.map((it,i)=>{const c=arr.find(x=>+x.i===i+1)||arr[i];return c&&c.scene?{title:String(c.title||it.terr).slice(0,60),scene:String(c.scene).slice(0,700)}:{title:it.terr,scene:localScene()}})}
+async function fillConcepts(items){
+  await Promise.all(chunk(items,8).map(async ch=>{
+    try{const cs=await makeConcepts(ch);ch.forEach((it,i)=>{if(it.status==='cancel')return;it.title=cs[i].title;it.scene=cs[i].scene;it.prompt=buildMain(it);Q.push(it)})}
+    catch(e){ch.forEach(it=>{if(it.status==='concept'){it.status='cancel';it._tr=0;Q.s.tot--;upd(it);save(it)}})}}))}
+async function createBatch(){
+  if(!Pool.usable().length){toast('Ajoute au moins une clé API','err');openPanel('pKeys');return}
+  if(!S.ref){toast('Ajoute d\'abord une photo de référence','err');openPanel('pPhoto');return}
+  const n=S.cfg.n,b={id:uid(),n,t:Date.now(),ratio:S.cfg.ratio,idx:(S.batches.reduce((m,x)=>Math.max(m,x.idx||0),0)+1)};
+  S.batches.push(b);saveBatches();S.active=b.id;S.filter='batch';S.limit=Math.max(60,n);
+  const items=pickTerritories(n).map(t=>{const it=newItem({batchId:b.id,kind:'main',title:t.name,terr:t.name,cat:t.cat,tprompt:t.prompt,ratio:b.ratio,size:S.cfg.size,comp:compFor(),refMode:'face'});track(it);return it});
+  items.forEach(addItem);renderStrip();renderGrid();runbar();
+  window.scrollTo({top:$('#gallery').offsetTop-70,behavior:'smooth'});
+  await fillConcepts(items)}
+function retry(it){if(!it.prompt){if(it.kind==='main'){it.scene=it.scene||localScene();it.prompt=buildMain(it)}else return}it.err='';track(it);Q.push(it)}
+
+/* ═════════════ FILE DE GÉNÉRATION ═════════════ */
+Q.s={tot:0,ok:0,ko:0};
+function track(it){if(!it._tr){it._tr=1;Q.s.tot++}}
+const autoWorkers=()=>clamp(Pool.usable().length*(S.cfg.size==='2K'?2:3),1,60);
+const workers=()=>S.cfg.workers>0?S.cfg.workers:autoWorkers();
+const pending=()=>S.items.reduce((n,i)=>n+(i.status==='concept'||i.status==='queued'||i.status==='running'?1:0),0);
+Q.push=function(it){track(it);it.status='queued';upd(it);this.jobs.push(it);this.pump();runbar()};
+Q.pump=function(){while(!this.paused&&this.run<workers()&&this.jobs.length){const it=this.jobs.shift();this.run++;execItem(it).finally(()=>{this.run--;this.pump();runbar()})}};
+Q.stop=function(){this.ctrl.abort();this.ctrl=new AbortController();this.jobs=[];this.paused=false;
+  S.items.forEach(it=>{if(it.status==='concept'||it.status==='queued'){it.status='cancel';if(it._tr){it._tr=0;Q.s.tot--}upd(it);save(it)}});runbar()};
+function refsFor(it){const r=[],m=it.refMode;const src=it.srcId&&byId(it.srcId);const su=src&&src.url;
+  if(it.srcFirst&&su)r.push(su);
+  if(m==='face'&&S.ref)r.push(S.ref);
+  if(m==='face'&&it.comp==='ref2'&&S.ref2)r.push(S.ref2);
+  if(!it.srcFirst&&su)r.push(su);
+  return r.slice(0,3)}
+async function execItem(it){
+  it.status='running';upd(it);
+  try{const url=await genImage(it.prompt,{size:it.size,ratio:it.ratio,refs:refsFor(it),faceNeeded:it.refMode==='face'});
+    it.url=url;it.status='done';it.err='';Q.s.ok++;Q.times.push(Date.now());if(Q.times.length>24)Q.times.shift();save(it);makeThumb(it)}
+  catch(e){const st=/Arrêté/.test(e.message);it.status=st?'cancel':'error';it.err=e.message;if(!st)Q.s.ko++;else Q.s.tot--}
+  it._tr=0;save(it);upd(it)}
+
+/* ═════════════ MINIATURES (RAM légère) ═════════════ */
+const TQ={q:[],n:0},TU=new Map(),MEMB=new Map();
+function makeThumb(it){TQ.q.push(it);pumpT()}
+function pumpT(){while(TQ.n<2&&TQ.q.length){const it=TQ.q.shift();TQ.n++;doThumb(it).finally(()=>{TQ.n--;pumpT()})}}
+async function doThumb(it){
+  try{const r=await fetch(it.url,{mode:'cors'});if(!r.ok)throw 0;const blob=await r.blob();const bmp=await createImageBitmap(blob);
+    const sc=Math.min(1,380/bmp.width),c=document.createElement('canvas');c.width=Math.max(1,Math.round(bmp.width*sc));c.height=Math.max(1,Math.round(bmp.height*sc));
+    c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);if(bmp.close)bmp.close();
+    const tb=await new Promise(res=>c.toBlob(res,'image/jpeg',0.74));if(!tb)throw 0;
+    if(!(await IDB.put('thumbs',tb,it.id)))MEMB.set(it.id,tb);it.thumb=true;save(it)}
+  catch(e){it.thumb=false}
+  syncAll(it.id)}
+async function thumbURL(id){if(TU.has(id))return TU.get(id);let b=MEMB.get(id)||await IDB.get('thumbs',id);if(!b)return null;const u=URL.createObjectURL(b);TU.set(id,u);return u}
+function releaseThumb(id){const u=TU.get(id);if(u){URL.revokeObjectURL(u);TU.delete(id)}}
+
+/* ═════════════ VISION : analyse des photos ═════════════ */
+async function analyze(dataUri){
+  try{const t=await callText([{role:'system',content:'Describe the main person in this photo in 35-50 English words: apparent gender and age range, hair, skin tone, distinctive facial features, glasses/beard. No markdown.'},{role:'user',content:[{type:'text',text:'Describe the person.'},{type:'image_url',image_url:{url:dataUri}}]}],{max:200,temp:0.3});return t.trim()}
+  catch(e){return''}}
+
+/* ═════════════ CINÉMA ═════════════ */
+const SHOTS=[
+['Cadrages','close','🔍','Gros plan visage','extreme close-up on the face, eyes in sharp focus','face'],
+['Cadrages','wide','🏞️','Plan large','wide establishing shot, the character small inside the vast environment','face'],
+['Cadrages','low','⬆️','Contre-plongée héroïque','heroic low-angle shot looking up at the character against a dramatic sky','face'],
+['Cadrages','high','⬇️','Plongée','high-angle top-down shot looking down on the character','face'],
+['Cadrages','back','🚶','De dos','shot from behind, the character walking away into the scene, face not visible','back'],
+['Cadrages','ots','👥','Par-dessus l\'épaule','over-the-shoulder shot showing what the character is looking at, face hidden','back'],
+['Cadrages','sil','🌓','Silhouette','striking silhouette of the character against a luminous background','face'],
+['Cadrages','amer','🤠','Plan américain','medium cowboy shot from the knees up, confident stance','face'],
+['Cadrages','dutch','📐','Plan penché','Dutch-angle tilted shot creating unease','face'],
+['Cadrages','insert','🔎','Insert objet','close-up insert of a meaningful prop from this scene, no person visible','scene'],
+['Décors (sans personnage)','empty','🏛️','Même décor vide','the exact same location, completely empty, no people','scene'],
+['Décors (sans personnage)','angle','🎥','Autre angle du lieu','the same location seen from a completely different camera angle, no people','scene'],
+['Décors (sans personnage)','inter','🚪','Intérieur lié','an interior space strongly connected to this world (inside the building, vehicle or room), no people','scene'],
+['Décors (sans personnage)','exter','🌆','Extérieur / rue','the exterior or street right outside this location, no people','scene'],
+['Décors (sans personnage)','aerial','🚁','Vue aérienne','aerial drone view of the entire location, no people visible','scene'],
+['Décors (sans personnage)','detail','🧱','Détail de décor','close detail of architecture or texture belonging to this world, no people','scene'],
+['Décors (sans personnage)','night','🌙','Même lieu de nuit','the same location at night with different lighting, no people','scene'],
+['Décors (sans personnage)','storm','⛈️','Météo extrême','the same location in dramatic weather (storm, snow or heavy fog), no people','scene'],
+['Casting','woman','👩','Avec une femme','the main actor together with a stunning woman, strong chemistry between them','woman'],
+['Casting','man','👨','Avec un homme','the main actor together with a charismatic man, strong dynamic between them','man'],
+['Casting','women','👩‍🎤','Sans lui : femmes seules','only female characters of this world, the male lead is absent from the frame','women'],
+['Casting','crowd','👪','Foule de figurants','the main actor surrounded by a crowd of extras in costumes fitting this world','face'],
+['Casting','villain','🦹','Antagoniste','a menacing antagonist of this world, imposing presence, new face, alone in frame','new'],
+['Casting','side','🎭','Personnage secondaire','a memorable supporting character of this world, new face, alone in frame','new'],
+['Casting','rival','⚔️','Face à face','the main actor in a tense face-to-face confrontation with a rival','rival'],
+['Action & émotion','chase','🏃','Poursuite','dynamic chase scene, motion blur, urgency','face'],
+['Action & émotion','love','💞','Moment romantique','tender romantic moment between two people, soft light','woman'],
+['Action & émotion','tense','😰','Tension silencieuse','tense silent moment, sweat, anticipation, shallow depth of field','face'],
+['Action & émotion','party','🎉','Célébration','joyful celebration, laughter, sparks or confetti','face'],
+['Action & émotion','flash','📜','Flashback','faded flashback look with film damage, the character in another era','face'],
+['Action & émotion','poster','🎟️','Affiche du film','full cinematic one-sheet movie poster composition of this world with the actor, bold empty title area','face']];
+const SHOTOBJ=SHOTS.map(s=>({g:s[0],id:s[1],ic:s[2],label:s[3],t:s[4],m:s[5]}));
+const EDITS=[['👗','Autre tenue','change ONLY the outfit to something completely different and unexpected'],['🏙️','Autre décor','change ONLY the background and location to a completely different one'],['🌃','De nuit','turn the scene into night with new lighting'],['⬛','Noir & blanc','convert to dramatic black-and-white film look'],['🕰️','Autre époque','transport the whole scene to a different historical era'],['🎨','Autre style','re-render in a completely different art style'],['😊','Sourire','give the person a warm natural smile'],['🌧️','Pluie','add heavy rain and wet reflections'],['🔍','Plus de détails','increase detail, sharpness and texture'],['👩','+ Une femme','add a stunning woman next to the person'],['👨','+ Un homme','add a charismatic man next to the person'],['🚫','Sans texte','remove any text or lettering from the image']];
+const FACEMODES=new Set(['face','back','woman','man','rival']);
+function shotPrompt(root,sh,ctx){
+  const m=sh.m,P=[];
+  P.push(`CINEMATIC FILM STILL — same visual universe as the reference image (${root.terr||root.title}): identical art direction, color grading, costume language and location design. ${sh.t}.`);
+  if(FACEMODES.has(m))P.push('The FIRST reference image is the actor: keep the EXACT same face and identity. The SECOND reference shows the look and location to stay consistent with.');
+  else P.push('The reference image shows the look, place and atmosphere to stay consistent with.');
+  if(m==='woman')P.push('ALSO IN FRAME: '+womanDesc()+'.');
+  if(m==='man')P.push('ALSO IN FRAME: '+manDesc()+'.');
+  if(m==='rival')P.push('Facing: '+manDesc()+', as a rival.');
+  if(m==='women')P.push('Female characters only: '+womanDesc()+'. No male lead.');
+  if(m==='back')P.push('The face must NOT be visible.');
+  if(ctx)P.push(ctx);
+  if(root.scene)P.push('World context: '+root.scene.slice(0,260)+'.');
+  P.push('Cinematic lighting, subtle film grain. '+ADM.qual);
+  return P.join(' ').slice(0,1900)}
+function spawn(src,o,extra={}){
+  const root=rootOf(src);
+  const it=newItem(Object.assign({parentId:root.id,batchId:root.batchId,kind:'shot',title:o.label,terr:root.terr,cat:root.cat,tprompt:root.tprompt,scene:root.scene,
+    ratio:S.cfg.shotRatio==='same'?src.ratio:S.cfg.shotRatio,size:S.cfg.size,comp:'none',refMode:FACEMODES.has(o.m)?'face':'scene',srcId:src.url?src.id:null},extra));
+  it.prompt=o.prompt||shotPrompt(root,o);addItem(it);Q.push(it);return it}
+function runShots(src,specs){specs.forEach(s=>spawn(src,s));toast(specs.length+' plan'+(specs.length>1?'s':'')+' en cours…','ok');renderGrid();refreshViewerKids()}
+function runEdit(src,instr){
+  const root=rootOf(src);
+  spawn(src,{label:'Modif : '+instr.slice(0,28),m:'face',prompt:`Edit the FIRST reference image: ${instr}. Keep the composition and everything else identical unless the instruction requires otherwise. The person keeps the exact same face (second reference = face).`.slice(0,1900)},{kind:'edit',srcFirst:true,ratio:src.ratio});
+  toast('Modification en cours…','ok');refreshViewerKids()}
+async function runVariants(src,n=4){
+  const root=rootOf(src),made=[];
+  for(let i=0;i<n;i++){const it=newItem({parentId:root.id,batchId:root.batchId,kind:'variant',title:src.terr,terr:src.terr,cat:src.cat,tprompt:src.tprompt,ratio:src.ratio,size:S.cfg.size,comp:src.comp,refMode:'face',avoid:src.scene});track(it);addItem(it);made.push(it)}
+  refreshViewerKids();toast(n+' variantes…','ok');
+  try{const cs=await makeConcepts(made);made.forEach((it,i)=>{it.title=cs[i].title;it.scene=cs[i].scene;it.prompt=buildMain(it);Q.push(it)})}
+  catch(e){made.forEach(it=>{it.status='cancel';it._tr=0;Q.s.tot--;upd(it)})}}
+async function fetchIdeas(src){
+  const text=`Reference image: style "${src.terr}". Scene: ${src.scene||src.title}. Main actor: ${S.analysis||'the person in the photo'}.\nAct as a film director. Propose 20 DIFFERENT, exciting shots that expand this image into a film. Return ONLY a JSON array: [{"label":"French title, max 6 words","type":"face|scene|woman|man|women|new|back","prompt":"English, 30-50 words: exact shot (framing, action, location, lighting)"}]. Mix: 8 "face" (actor in new situations), 5 "scene" (related settings, NO people), 3 "woman" or "women", 2 "man" or "new", 2 "back". Never repeat a framing.`;
+  const sys='You are a film director and storyboard artist. Output valid JSON only.';
+  let arr=null;
+  for(const withImg of [true,false]){
+    try{const content=withImg&&src.url?[{type:'text',text},{type:'image_url',image_url:{url:src.url}}]:text;
+      arr=parseJson(await callText([{role:'system',content:sys},{role:'user',content}],{max:3900,temp:0.95}));if(Array.isArray(arr)&&arr.length)break}catch(e){if(/Arrêté/.test(e.message))throw e}}
+  if(!Array.isArray(arr)||!arr.length)return shuffle(SHOTOBJ).slice(0,20).map(s=>({label:s.label,m:s.m,prompt:null,t:s.t}));
+  return arr.filter(a=>a&&a.prompt).slice(0,24).map(a=>({label:String(a.label||'Plan').slice(0,60),m:['face','scene','woman','man','women','new','back'].includes(a.type)?a.type:'face',t:String(a.prompt).slice(0,500)}))}
+
+/* ═════════════ FILMS ═════════════ */
+async function makeFilm(src,idea){
+  const root=rootOf(src);
+  const text=`Reference image: style "${root.terr}". Scene: ${root.scene||root.title}. Main actor: ${S.analysis||'the person'}.${idea?'\nDirector\'s idea: '+idea:''}\nInvent a short film starring this actor in this visual universe. Return ONLY JSON: {"title":"French title","logline":"1 French sentence","synopsis":"3-4 French sentences","scenes":[{"title":"French, max 5 words","desc":"English, 35-55 words: exact visual description of the shot (framing, action, location, lighting)","type":"face|scene|woman|man|women|new|back"}]} with exactly 10 scenes forming a clear arc (setup, rising tension, climax, resolution). Mix close-ups, wide shots, empty-location shots ("scene") and other characters.`;
+  let j=null;
+  for(const withImg of [true,false]){
+    try{const content=withImg&&src.url?[{type:'text',text},{type:'image_url',image_url:{url:src.url}}]:text;
+      j=parseJson(await callText([{role:'system',content:'You are a film writer and director. Output valid JSON only.'},{role:'user',content}],{max:3900,temp:0.9}));if(j&&Array.isArray(j.scenes)&&j.scenes.length)break}catch(e){if(/Arrêté/.test(e.message))throw e}}
+  if(!j||!Array.isArray(j.scenes)||!j.scenes.length)throw new Error('Le scénario n\'a pas pu être généré, réessaie');
+  const film={id:uid(),srcId:root.id,title:String(j.title||'Sans titre'),logline:String(j.logline||''),synopsis:String(j.synopsis||''),t:Date.now(),scenes:[]};
+  j.scenes.slice(0,14).forEach((s,i)=>addScene(film,s,root));
+  S.films.unshift(film);saveFilms();return film}
+function addScene(film,s,root){
+  const it=newItem({parentId:root.id,batchId:root.batchId,kind:'scene',filmId:film.id,title:String(s.title||'Scène'),terr:root.terr,cat:root.cat,tprompt:root.tprompt,scene:root.scene,ratio:'16:9',size:S.cfg.size,comp:'none',
+    refMode:FACEMODES.has(s.type)?'face':'scene',srcId:root.url?root.id:null,status:'idle'});
+  addItem(it);film.scenes.push({id:uid(),title:it.title,desc:String(s.desc||s.t||'').slice(0,600),type:['face','scene','woman','man','women','new','back'].includes(s.type)?s.type:'face',itemId:it.id})}
+function scenePrompt(film,sc,it){
+  const root=byId(film.srcId)||it,idx=film.scenes.indexOf(sc)+1;
+  return shotPrompt(root,{m:sc.type,t:sc.desc},`Scene ${idx} of ${film.scenes.length} from the short film "${film.title}".`)}
+function genScene(film,sc){const it=byId(sc.itemId);if(!it)return;it.prompt=scenePrompt(film,sc,it);it.refMode=FACEMODES.has(sc.type)?'face':'scene';it.title=sc.title;it.err='';Q.push(it)}
+async function moreScenes(film){
+  const root=byId(film.srcId);if(!root)return;
+  const text=`Short film "${film.title}": ${film.synopsis}\nExisting scenes: ${film.scenes.map((s,i)=>(i+1)+'. '+s.title).join(' | ')}\nWrite 4 MORE scenes that continue or deepen the story. Return ONLY a JSON array: [{"title":"French, max 5 words","desc":"English, 35-55 words visual description","type":"face|scene|woman|man|women|new|back"}]`;
+  const arr=parseJson(await callText([{role:'system',content:'You are a film writer and director. Output valid JSON only.'},{role:'user',content:text}],{max:1800,temp:0.9}));
+  if(!Array.isArray(arr)||!arr.length)throw new Error('Pas de nouvelle scène');arr.slice(0,6).forEach(s=>addScene(film,s,root));saveFilms()}
+
+/* ═════════════ UTILITAIRES UI ═════════════ */
+const arCss=r=>String(r||'3:4').replace(':','/');
+const seg=(key,opts,val)=>`<div class="seg">${opts.map(([v,l])=>`<button data-seg="${key}" data-v="${esc(v)}" class="${String(val)===String(v)?'on':''}">${l}</button>`).join('')}</div>`;
+const STATUS_TXT={concept:'idée en cours…',idle:'à générer',queued:'en attente…',running:'génération…',error:'⚠ échec · touche pour relancer',cancel:'↻ touche pour relancer',done:''};
+function openPanel(id){const p=$('#'+id);if(p){p.open=true;p.scrollIntoView({behavior:'smooth',block:'center'})}}
+function slug(s){return String(s||'image').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toLowerCase().slice(0,40)||'image'}
+async function download(it){
+  try{const r=await fetch(it.url,{mode:'cors'});const b=await r.blob();const a=document.createElement('a');a.href=URL.createObjectURL(b);
+    a.download=slug(it.title)+'-'+it.id.slice(0,4)+'.'+((b.type.split('/')[1]||'png').replace('jpeg','jpg'));document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+  catch(e){window.open(it.url,'_blank')}}
+function downloadText(name,text){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));a.download=name;document.body.appendChild(a);a.click();a.remove()}
+
+/* ═════════════ IMAGES PARESSEUSES (libère la RAM hors écran) ═════════════ */
+const IO=new IntersectionObserver(es=>{for(const e of es){e.target._vis=e.isIntersecting;syncImg(e.target)}},{rootMargin:'1400px 500px'});
+async function syncImg(el){
+  const img=el.firstElementChild,it=byId(el.dataset.id);if(!img||!it)return;
+  if(el._vis&&it.status==='done'){if(img._set)return;img._set=1;
+    let src=null;if(it.thumb)src=await thumbURL(it.id);src=src||it.url;
+    if(!el._vis||!img._set){return}
+    img.onload=()=>img.classList.add('on');img.src=src}
+  else if(!el._vis&&img._set){img.removeAttribute('src');img.classList.remove('on');img._set=0;releaseThumb(it.id)}}
+function syncAll(id){$$('.lz[data-id="'+id+'"]').forEach(el=>{const i=el.firstElementChild;if(i&&i._set){i._set=0}syncImg(el)})}
+function observe(root){$$('.lz',root).forEach(el=>{el._vis=false;IO.observe(el)})}
+function resetLazy(){IO.disconnect();TU.forEach(u=>URL.revokeObjectURL(u));TU.clear()}
+
+/* ═════════════ MISE À JOUR GLOBALE D'UN ITEM ═════════════ */
+function upd(it){
+  $$('[data-id="'+it.id+'"]').forEach(el=>{
+    if(el.classList.contains('card')||el.classList.contains('k')||el.classList.contains('th')){
+      ['concept','idle','queued','running','done','error','cancel'].forEach(c=>el.classList.remove(c));el.classList.add(it.status);
+      const pt=$('.pt',el);if(pt)pt.textContent=STATUS_TXT[it.status]||'';
+      const cl=$('.cl',el);if(cl)cl.textContent=it.title;
+      const pn=$('.ptt',el);if(pn)pn.textContent=it.title;
+      const fv=$('.fv',el);if(fv)fv.textContent=it.fav?'❤':'';
+      const kc=$('.kcn',el);if(kc){const n=kidsOf(it.id).length;kc.textContent=n?'🎬'+n:''}
+      syncImg(el)}});
+  if(V.open&&it.id===V.cur)renderViewer();
+  if(V.open)refreshViewerKids();
+  const root=it.parentId&&byId(it.parentId);if(root)upd2(root);
+  throttleBar();updateStripCounts()}
+function upd2(root){$$('.card[data-id="'+root.id+'"] .kcn').forEach(kc=>{const n=kidsOf(root.id).length;kc.textContent=n?'🎬'+n:''})}
+const throttleBar=debounce(()=>{runbar()},120);
+const updateStripCounts=debounce(()=>renderStrip(),400);
+
+/* ═════════════ HEADER / CLÉS ═════════════ */
+function updateHeader(){
+  const u=Pool.usable().length,r=Pool.ready().length,kc=$('#keyChip');
+  kc.className='chip-s '+(u?(r?'ok':''):(Pool.list.length?'bad':''));
+  $('span',kc).textContent=u?(r+'/'+u+' clé'+(u>1?'s':'')):(Pool.list.length?'clés refusées':'0 clé');
+  const sc=$('#storeChip');sc.className='chip-s '+(KV.ok()?'ok':'bad');$('span',sc).textContent=KV.ok()?'Sauvegardé':'Non sauvegardé';
+  $('#warnBox').innerHTML=KV.ok()?'':'<div class="warn">⚠️ Ton navigateur bloque le stockage local (fichier ouvert dans un aperçu ou une iframe ?). Tes clés restent actives pendant cette session mais seront perdues à la fermeture. Ouvre le fichier directement dans Chrome / Safari, ou utilise Admin → Données → Exporter.</div>'}
+function renderKeys(){
+  const now=Date.now(),u=Pool.usable().length;
+  $('#keysList').innerHTML=Pool.list.map((k,i)=>{
+    let c='',t='non testée';
+    if(k.st==='bad'){c='bad';t='refusée'}else if(k.st==='testing'){t='test…'}else if(k.cool>now){c='cool';t='pause '+Math.ceil((k.cool-now)/1000)+'s'}else if(k.st==='ok'){c='ok';t='OK'}
+    return `<span class="kc ${c}"><span>${esc(k.key.slice(0,5))}…${esc(k.key.slice(-4))}</span><em>${t}</em><button data-act="delKey" data-i="${i}" aria-label="Supprimer">✕</button></span>`}).join('');
+  $('#keysSub').textContent=Pool.list.length?`${u} utilisable${u>1?'s':''} / ${Pool.list.length}`:'à ajouter';
+  $('#pKeys').classList.toggle('done',u>0);
+  $('#keysHint').textContent=Pool.list.length?(`Enregistrées automatiquement. ${autoWorkers()} workers en parallèle seront utilisés (${u} clé${u>1?'s':''} × ${S.cfg.size==='2K'?2:3}) — modifiable dans Création → Options.`):'Colle autant de clés que tu veux : elles sont enregistrées et testées automatiquement.';
+  if(Pool.list.some(k=>k.cool>now))clearTimeout(renderKeys._t),renderKeys._t=setTimeout(renderKeys,1000)}
+async function addKeysFromInput(){
+  const inp=$('#keysIn'),keys=Pool.parse(inp.value);
+  if(!keys.length){toast('Aucune clé détectée','err');return}
+  const before=Pool.list.length,n=Pool.add(keys),dup=keys.length-n;inp.value='';
+  renderKeys();updateHeader();updateCreateInfo();
+  toast(n?`${n} clé${n>1?'s':''} ajoutée${n>1?'s':''}${dup?` (${dup} déjà présente${dup>1?'s':''})`:''}`:'Ces clés étaient déjà enregistrées',n?'ok':'');
+  if(!KV.ok())toast('Stockage bloqué : clés gardées en mémoire seulement','err');
+  await Promise.all(Pool.list.filter(k=>k.st==='new').map(testKey));
+  const ok=Pool.usable().length,bad=Pool.list.filter(k=>k.st==='bad').length;
+  if(bad)toast(bad+' clé'+(bad>1?'s':'')+' refusée'+(bad>1?'s':'')+' par l\'API','err');else if(n)toast(ok+' clé'+(ok>1?'s':'')+' prête'+(ok>1?'s':''),'ok')}
+
+/* ═════════════ PHOTOS ═════════════ */
+let fileTarget='ref';
+function renderPhoto(){
+  const slot=(k,img,label)=>img?`<div class="drop has" data-drop="${k}"><img src="${img}" alt=""><button class="x" data-act="clearRef" data-k="${k}">✕</button><span class="tag">${label}</span></div>`
+    :`<div class="drop" data-act="pickFile" data-k="${k}"><div><div style="font-size:30px">${k==='ref'?'📷':'👤'}</div><b>${k==='ref'?'Touche pour choisir une photo':'2ᵉ personne (facultatif)'}</b><div class="hint">${k==='ref'?'ou glisse-la ici':'Pour mettre deux personnes réelles dans les scènes'}</div></div></div>`;
+  $('#drops').innerHTML=slot('ref',S.ref,'Personne principale')+(S.ref?slot('ref2',S.ref2,'2ᵉ personne'):'');
+  $('#photoSub').textContent=S.ref?(S.ref2?'2 personnes':'prête'):'visage à conserver';$('#pPhoto').classList.toggle('done',!!S.ref)}
+function readImage(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onerror=rej;fr.onload=()=>{const im=new Image();im.onerror=rej;im.onload=()=>{
+  const sc=Math.min(1,1024/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);
+  const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',0.88))};im.src=fr.result};fr.readAsDataURL(file)})}
+async function setPhoto(file,k){
+  if(!file||!file.type.startsWith('image/')){toast('Fichier image requis','err');return}
+  try{const d=await readImage(file);S[k]=d;KV.set(k,d);if(k==='ref'){S.analysis='';KV.set('analysis','')}renderPhoto();renderCreate();toast('Photo enregistrée','ok')}catch(e){toast('Image illisible','err')}}
+async function ensureAnalysis(){if(S.analysis||!S.ref)return;const a=await analyze(S.ref);if(a){S.analysis=a;KV.set('analysis',a)}}
+
+/* ═════════════ PANNEAU CRÉATION ═════════════ */
+const CATSEL=()=>S.cfg.cats||Object.keys(CATS);
+function renderCreate(){
+  const c=S.cfg;
+  $('#createSub').textContent=`${c.n} · ${c.ratio} · ${({classic:'Classique',bold:'Audacieux',shock:'Choc visuel'})[c.variety]}`;
+  $('#createBody').innerHTML=`
+  <div class="lbl">Nombre d'images</div>${seg('n',[[12,'12'],[20,'20'],[40,'40'],[80,'80']],c.n)}
+  <div class="lbl">Format</div>${seg('ratio',[['3:4','📱 3:4'],['9:16','9:16'],['1:1','Carré'],['4:3','4:3'],['16:9','🎬 16:9']],c.ratio)}
+  <div class="lbl">Personnages</div>${seg('comp',[['none','Seul(e)'],['woman','+ Femme'],['man','+ Homme'],['mix','Mix auto']].concat(S.ref2?[['ref2','2 personnes']]:[]),c.comp)}
+  <div class="lbl">Niveau de folie</div>${seg('variety',[['classic','Classique'],['bold','Audacieux'],['shock','⚡ Choc visuel']],c.variety)}
+  <p class="hint">${c.variety==='shock'?'Fusions de deux univers + 2 éléments surprise imposés à chaque image.':c.variety==='bold'?'Chaque image reçoit un élément surprise imposé.':'Un univers différent par image, sans mélange.'}</p>
+  <details style="margin-top:14px"><summary class="btn sm" style="display:inline-flex;list-style:none">⚙️ Options avancées</summary>
+   <div class="lbl">Qualité</div>${seg('size',[['1K','1K · rapide'],['2K','2K · qualité']],c.size)}
+   <div class="lbl">Expression du visage</div>${seg('expr',[['libre','Libre'],['smile','Sourire'],['neutral','Neutre'],['intense','Intense']],c.expr)}
+   <div class="lbl">Format des plans cinéma</div>${seg('shotRatio',[['16:9','16:9'],['same','Même format']],c.shotRatio)}
+   <div class="lbl">Texte à afficher dans l'image (facultatif)</div>
+   <div class="row"><button class="btn sm ${c.textOn?'pri':''}" data-act="toggleText">${c.textOn?'Activé':'Désactivé'}</button><input class="grow" data-cfg="text" value="${esc(c.text)}" placeholder="ex : nom du film, slogan…"></div>
+   <div class="lbl">Catégories de styles</div><div class="seg">${Object.keys(CATS).map(k=>`<button data-act="toggleCat" data-c="${k}" class="${CATSEL().includes(k)?'on':''}">${CATS[k][0]} ${CATS[k][1]}</button>`).join('')}</div>
+   <div class="lbl">Workers en parallèle</div>
+   <div class="row"><input type="number" min="1" max="80" class="grow" id="workersIn" value="${workers()}" data-cfg="workers"><button class="btn sm" data-act="autoWorkers">Auto</button></div>
+   <p class="hint" id="wHint"></p>
+  </details>
+  <div id="createInfo"></div>`;
+  updateCreateInfo()}
+function updateCreateInfo(){
+  const el=$('#createInfo');if(!el)return;const c=S.cfg,u=Pool.usable().length,w=workers();
+  const rpm=c.size==='2K'?5:20,thr=Math.max(0.5,Math.min(w*3,u*rpm)),mins=Math.max(1,Math.ceil(c.n/thr));
+  const wi=$('#workersIn');if(wi&&document.activeElement!==wi)wi.value=w;
+  const wh=$('#wHint');if(wh)wh.textContent=c.workers>0?`Réglé à la main (auto : ${autoWorkers()}).`:`Auto : ${u} clé${u>1?'s':''} × ${c.size==='2K'?2:3} = ${autoWorkers()} workers.`;
+  const first=!S.batches.length;
+  el.innerHTML=`<button class="btn pri big" style="margin-top:16px" data-act="create" ${u&&S.ref?'':'disabled'}>✨ ${first?'Créer':'Série suivante :'} ${c.n} images</button>
+  <p class="hint" style="text-align:center">${!u?'① Ajoute au moins une clé API':!S.ref?'② Ajoute une photo de référence':`⚡ ${w} workers · environ ${mins} min · les styles déjà utilisés sont évités`}</p>`}
+
+/* ═════════════ GALERIE ═════════════ */
+function visibleItems(){
+  if(S.filter==='fav')return S.items.filter(i=>i.fav&&i.status==='done').sort((a,b)=>b.t-a.t);
+  if(S.filter==='plans')return S.items.filter(i=>i.kind==='shot'||i.kind==='edit'||i.kind==='variant').sort((a,b)=>b.t-a.t);
+  return S.items.filter(i=>i.kind==='main'&&i.batchId===S.active)}
+function renderStrip(){
+  const el=$('#strip');if(!el)return;
+  const cnt={};S.items.forEach(i=>{if(i.kind==='main'){const c=cnt[i.batchId]||(cnt[i.batchId]={d:0});if(i.status==='done')c.d++}});
+  const favN=S.items.filter(i=>i.fav).length,plN=S.items.filter(i=>i.kind==='shot'||i.kind==='edit'||i.kind==='variant').length;
+  el.innerHTML=S.batches.slice().reverse().map(b=>`<button data-act="filterBatch" data-b="${b.id}" class="${S.filter==='batch'&&S.active===b.id?'on':''}">Série ${b.idx}<small>${(cnt[b.id]||{d:0}).d}/${b.n}</small></button>`).join('')
+   +(S.batches.length?'<span class="sep"></span>':'')+`<button data-act="filterFav" class="${S.filter==='fav'?'on':''}">❤ Favoris<small>${favN}</small></button><button data-act="filterPlans" class="${S.filter==='plans'?'on':''}">🎬 Plans<small>${plN}</small></button>`;
+  el.classList.toggle('hide',!S.batches.length&&!favN&&!plN);
+  const gi=$('#gridInfo'),cb=S.batches.find(x=>x.id===S.active);if(gi&&cb&&S.filter==='batch')gi.textContent='Série '+cb.idx+' · '+((cnt[cb.id]||{d:0}).d)+'/'+cb.n+' prêtes'}
+function cardHTML(it){
+  const cat=CATS[it.cat]?CATS[it.cat][0]:'✨',n=kidsOf(it.id).length;
+  return `<div class="card lz ${it.status}" data-id="${it.id}" data-act="open" style="--ar:${arCss(it.ratio)}"><img alt="" decoding="async" draggable="false"><div class="ph"><span class="spin"></span><span class="ptt">${esc(it.title)}</span><span class="pt">${STATUS_TXT[it.status]||''}</span></div><div class="cb"><span>${cat}</span><span class="kcn">${n?'🎬'+n:''}</span><span class="fv">${it.fav?'❤':''}</span></div><div class="cl">${esc(it.title)}</div></div>`}
+function renderGrid(){
+  resetLazy();const wrap=$('#gridwrap');if(!wrap)return;
+  const list=visibleItems();renderStrip();
+  if(!list.length){wrap.innerHTML=S.filter==='batch'?`<div class="empty"><b>Ton studio est vide</b>Ajoute tes clés, une photo, puis lance ta première série.</div>`:`<div class="empty"><b>${S.filter==='fav'?'Aucun favori':'Aucun plan'}</b>${S.filter==='fav'?'Touche ❤ dans une image pour la garder ici.':'Ouvre une image puis touche 🎬 Cinéma.'}</div>`;return}
+  const shown=list.slice(0,S.limit);let tb='';
+  if(S.filter==='batch'){const b=S.batches.find(x=>x.id===S.active);const d=list.filter(i=>i.status==='done').length;
+    tb=`<div class="row" style="margin-bottom:8px"><span class="grow mono" id="gridInfo">Série ${b?b.idx:''} · ${d}/${list.length} prêtes</span><button class="btn sm" data-act="dlBatch">⬇ Tout</button><button class="btn sm dng" data-act="delBatch">🗑 Série</button></div>`}
+  wrap.innerHTML=tb+`<div class="grid">${shown.map(cardHTML).join('')}</div>`
+    +(list.length>shown.length?`<button class="btn more" data-act="more">Afficher plus (${list.length-shown.length})</button>`:'')
+    +(S.filter==='batch'&&S.batches.length?`<button class="btn pri more" data-act="create">➕ ${S.cfg.n} nouvelles images</button>`:'');
+  observe(wrap)}
+
+/* ═════════════ BARRE DE PROGRESSION ═════════════ */
+function runbar(){
+  const el=$('#runbar'),pend=pending(),s=Q.s,errs=S.items.filter(i=>i.status==='error'&&(S.filter!=='batch'||i.batchId===S.active)).length;
+  if(!pend&&!errs){el.classList.add('hide');if(!pend){Q.s={tot:0,ok:0,ko:0}}return}
+  el.classList.remove('hide');
+  if(!pend){el.innerHTML=`<div class="in"><div class="row"><span class="grow">⚠️ ${errs} image${errs>1?'s':''} en échec</span><button class="btn sm pri" data-act="retryErr">↻ Tout relancer</button></div></div>`;return}
+  const done=s.ok+s.ko,tot=Math.max(s.tot,done+pend),t=Q.times;let eta='';
+  if(t.length>=4){const span=(t[t.length-1]-t[0])/1000,rate=(t.length-1)/Math.max(span,1);if(rate>0){const sec=Math.round(pend/rate);eta=' · ~'+(sec>90?Math.round(sec/60)+' min':sec+' s')}}
+  el.innerHTML=`<div class="in"><div class="row"><b>${done}/${tot}</b><span class="mono grow">${Q.run} en cours${s.ko?' · ⚠ '+s.ko:''}${eta}</span><button class="btn sm" data-act="pause">${Q.paused?'▶ Reprendre':'⏸ Pause'}</button><button class="btn sm dng" data-act="stop">⏹ Stop</button></div><div class="bar"><i style="width:${Math.round(done/tot*100)}%"></i></div></div>`}
+
+/* ═════════════ VISIONNEUSE ═════════════ */
+const V={open:false,list:[],cur:null};
+function famList(){const cur=byId(V.cur);if(!cur)return[];const root=rootOf(cur);
+  if(cur.id!==root.id||cur.kind!=='main')return[root].concat(kidsOf(root.id).sort((a,b)=>a.t-b.t)).filter(i=>i.status==='done');return V.list}
+function openViewer(id,list){const it=byId(id);if(!it||it.status!=='done')return;V.list=(list||visibleItems()).filter(i=>i.status==='done');V.cur=id;V.open=true;$('#viewer').classList.remove('hide');document.body.style.overflow='hidden';renderViewer()}
+function closeViewer(){V.open=false;$('#viewer').classList.add('hide');$('#viewer').innerHTML='';document.body.style.overflow=''}
+function renderViewer(){
+  const it=byId(V.cur);if(!it){closeViewer();return}
+  const fl=famList(),idx=fl.findIndex(i=>i.id===it.id);
+  $('#viewer').innerHTML=`<div class="v-top"><button class="ib" data-act="closeV">✕</button><div class="t">${esc(it.title)}<small>${esc(it.terr||'')} · ${idx+1}/${fl.length} · ${it.ratio}</small></div><button class="ib" data-act="fav">${it.fav?'❤️':'🤍'}</button></div>
+  <div class="v-img" id="vImg"><img src="${esc(it.url)}" alt="" decoding="async">${fl.length>1?'<button class="v-nav" style="left:6px" data-act="prev">‹</button><button class="v-nav" style="right:6px" data-act="next">›</button>':''}</div>
+  <div class="v-kids" id="vKids"></div>
+  <div class="v-bar"><button class="btn" data-act="dl"><span>⬇️</span>Enregistrer</button><button class="btn" data-act="edit"><span>✏️</span>Modifier</button><button class="btn pri" data-act="cinema"><span>🎬</span>Cinéma</button><button class="btn" data-act="variants"><span>🔁</span>Variantes</button><button class="btn" data-act="more2"><span>⋯</span>Plus</button></div>`;
+  refreshViewerKids();
+  const vi=$('#vImg');let x0=null;vi.onpointerdown=e=>{x0=e.clientX};vi.onpointerup=e=>{if(x0===null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>60)navV(dx<0?1:-1)}}
+function refreshViewerKids(){
+  const box=$('#vKids');if(!box||!V.open)return;const cur=byId(V.cur);if(!cur)return;const root=rootOf(cur);
+  const kids=kidsOf(root.id).sort((a,b)=>a.t-b.t);
+  if(!kids.length){box.innerHTML='<span class="hint" style="padding:6px 0">Aucun plan dérivé · touche 🎬 Cinéma pour en créer</span>';return}
+  box.innerHTML=[root].concat(kids).map(k=>`<div class="k lz ${k.status} ${k.id===cur.id?'cur':''}" data-id="${k.id}" data-act="kid" style="aspect-ratio:${arCss(k.ratio)}"><img alt="" decoding="async"><span class="pt" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:#8d8c96;text-align:center">${k.status==='done'?'':'…'}</span></div>`).join('');observe(box)}
+function navV(d){const fl=famList();if(fl.length<2)return;let i=fl.findIndex(x=>x.id===V.cur);i=(i+d+fl.length)%fl.length;V.cur=fl[i].id;renderViewer()}
+
+/* ═════════════ FEUILLES (sheets) ═════════════ */
+function openSheet(title,body,foot){$('#sheet').innerHTML=`<div class="sh-bg" data-act="closeSheet"></div><div class="sh-box"><div class="sh-head"><span>${title}</span><button class="ib" data-act="closeSheet">✕</button></div><div class="sh-body" id="shBody">${body}</div>${foot?`<div class="sh-foot" id="shFoot">${foot}</div>`:''}</div>`;$('#sheet').classList.remove('hide')}
+function closeSheet(){$('#sheet').classList.add('hide');$('#sheet').innerHTML=''}
+const CS={sel:new Set(),selI:new Set(),ideas:[]};
+function cinemaSheet(){
+  const it=byId(V.cur);if(!it)return;CS.sel.clear();CS.selI.clear();CS.ideas=[];
+  const groups=[...new Set(SHOTOBJ.map(s=>s.g))];
+  const body=`<div class="lbl">Format des plans</div>${seg('shotRatio',[['16:9','🎬 16:9'],['same','Même format']],S.cfg.shotRatio)}
+  ${groups.map(g=>`<div class="lbl">${g}</div><div class="shotg">${SHOTOBJ.filter(s=>s.g===g).map(s=>`<button data-act="shot" data-id="${s.id}">${s.ic} ${s.label}</button>`).join('')}</div>`).join('')}
+  <div class="lbl">💡 Idées du réalisateur (IA)</div><button class="btn" style="width:100%" data-act="ideas" id="ideasBtn">Générer 20 idées pour cette image</button><div class="ideas" id="ideasBox" style="margin-top:8px"></div>
+  <div class="lbl">🎞️ Développer un film</div><input id="filmIdea" placeholder="Idée de film (facultatif) : un western ? une course-poursuite ?"><button class="btn" style="width:100%;margin-top:8px" data-act="mkfilm" id="filmBtn">Écrire un film de 10 scènes à partir de cette image</button>`;
+  openSheet('🎬 Cinéma — '+esc(it.title),body,`<div class="row"><button class="btn sm" data-act="randShots">🎲 8 au hasard</button><button class="btn pri grow" data-act="genSel" id="genSel" disabled>Choisis des plans</button></div>`)}
+function updGenSel(){const n=CS.sel.size+CS.selI.size,b=$('#genSel');if(!b)return;b.disabled=!n;b.textContent=n?`Générer ${n} plan${n>1?'s':''}`:'Choisis des plans'}
+function editSheet(){
+  const it=byId(V.cur);if(!it)return;
+  openSheet('✏️ Modifier cette image',`<textarea id="editTxt" placeholder="Décris la modification : « mets-lui un chapeau de cowboy », « fais pleuvoir », « change le fond en plage »…"></textarea><div class="lbl">Retouches rapides</div><div class="shotg">${EDITS.map((e,i)=>`<button data-act="editChip" data-i="${i}">${e[0]} ${e[1]}</button>`).join('')}</div>`,`<button class="btn pri big" data-act="applyEdit">Appliquer la modification</button>`)}
+function moreSheet(){
+  const it=byId(V.cur);if(!it)return;
+  openSheet('Plus',`<div class="row" style="margin-bottom:12px"><button class="btn grow" data-act="copyPrompt">📋 Copier le prompt</button><button class="btn dng" data-act="delItem">🗑 Supprimer</button></div><div class="lbl">Prompt envoyé</div><div class="pre">${esc(it.prompt)}</div>${it.scene?`<div class="lbl">Scène imaginée</div><div class="pre">${esc(it.scene)}</div>`:''}${it.err?`<div class="lbl">Dernière erreur</div><div class="pre">${esc(it.err)}</div>`:''}`)}
+
+/* ═════════════ FILMS ═════════════ */
+function renderFilms(){
+  const el=$('#v-films'),f=S.films.find(x=>x.id===S.filmOpen);
+  if(!f){el.innerHTML=`<h2 style="margin:6px 0 12px">🎬 Mes films</h2>`+(S.films.length?S.films.map(x=>{const g=x.scenes.filter(s=>(byId(s.itemId)||{}).status==='done').length;return `<div class="film" data-act="filmOpen" data-id="${x.id}"><h3>${esc(x.title)}</h3><p>${esc(x.logline)}</p><p class="mono">${x.scenes.length} scènes · ${g} générée${g>1?'s':''}</p></div>`}).join(''):`<div class="empty"><b>Aucun film pour l'instant</b>Ouvre une image dans le Studio, touche 🎬 Cinéma, puis « Développer un film ». L'IA écrit un scénario de 10 scènes avec le même acteur.</div>`);return}
+  const g=f.scenes.filter(s=>(byId(s.itemId)||{}).status==='done').length;
+  el.innerHTML=`<div class="row" style="margin-bottom:10px"><button class="btn sm" data-act="filmBack">‹ Films</button><span class="grow"></span><button class="btn sm dng" data-act="filmDel">🗑</button></div>
+  <input data-ff="title" value="${esc(f.title)}" style="font-size:18px;font-weight:800;margin-bottom:8px">
+  <input data-ff="logline" value="${esc(f.logline)}" style="margin-bottom:8px">
+  <textarea data-ff="synopsis" style="margin-bottom:10px">${esc(f.synopsis)}</textarea>
+  <div class="row" style="margin-bottom:12px"><button class="btn pri grow" data-act="filmGenAll">▶ Générer les scènes manquantes (${f.scenes.length-g})</button><button class="btn" data-act="filmMore">➕ 4 scènes</button><button class="btn" data-act="filmTxt">⬇ Script</button></div>
+  <div class="scenes">${f.scenes.map((sc,i)=>{const it=byId(sc.itemId)||{status:'idle'};return `<div class="scene"><div class="th lz ${it.status}" data-id="${sc.itemId}" data-act="scOpen" data-s="${sc.id}"><img alt=""><span class="sp pt">${it.status==='done'?'':(STATUS_TXT[it.status]||'')}</span></div><div class="tx"><input data-sc="${sc.id}" data-f="title" value="${esc(sc.title)}"><textarea data-sc="${sc.id}" data-f="desc">${esc(sc.desc)}</textarea><div class="row"><span class="mono">#${i+1}</span><button class="btn sm grow" data-act="scGen" data-s="${sc.id}">${it.status==='done'?'↻ Refaire':'▶ Générer'}</button><button class="btn sm" data-act="scUp" data-s="${sc.id}">▲</button><button class="btn sm" data-act="scDown" data-s="${sc.id}">▼</button><button class="btn sm dng" data-act="scDel" data-s="${sc.id}">✕</button></div></div></div>`}).join('')}</div>`;
+  observe(el)}
+const scById=(f,id)=>f.scenes.find(s=>s.id===id);
+
+/* ═════════════ ADMIN ═════════════ */
+let admTab='prompts',admCat='all';
+function renderAdmin(){
+  const T=[['prompts','Prompts'],['casting','Casting'],['styles','Styles'],['data','Données']];
+  const ta=(k,l,r=3)=>`<div class="lbl">${l}</div><textarea rows="${r}" data-adm="${k}">${esc(ADM[k])}</textarea>`;
+  let b='';
+  if(admTab==='prompts'){const last=S.items.filter(i=>i.prompt).slice(-1)[0];
+    b=ta('face','Verrou du visage')+ta('free','Ce qui doit changer')+`<div class="lbl">Expressions</div>`+['smile','neutral','intense'].map(k=>`<input style="margin-bottom:6px" data-admx="${k}" value="${esc(ADM.exprs[k])}" placeholder="${k}">`).join('')
+      +ta('woman','Prompt « + Femme » ({{DESC}})',2)+ta('man','Prompt « + Homme » ({{DESC}})',2)+ta('text','Prompt du texte ({{TEXT}})',2)+ta('qual','Qualité',2)+ta('sys','Consigne du directeur artistique IA (variété)',6)
+      +`<button class="btn dng" style="margin-top:12px" data-act="resetPrompts">Réinitialiser les prompts</button>`+(last?`<div class="lbl">Dernier prompt envoyé</div><div class="pre">${esc(last.prompt)}</div>`:'')}
+  if(admTab==='casting'){const inp=(k,l,ph)=>`<div class="lbl">${l}</div><input data-adm="${k}" value="${esc(ADM[k])}" placeholder="${ph||''}">`,lst=(k,l)=>`<div class="lbl">${l} (séparés par des virgules)</div><input data-admL="${k}" value="${esc(ADM[k].join(', '))}">`;
+    b=`<p class="hint">Si une description fixe est remplie, elle est toujours utilisée. Sinon un profil aléatoire est tiré à chaque image.</p>`+inp('womanCustom','Femme — description fixe','ex : a tall woman with red curls and freckles')+lst('womanEth','Femme — origines')+lst('womanHair','Femme — cheveux')+inp('manCustom','Homme — description fixe','ex : a stocky man with a grey beard')+lst('manEth','Homme — origines')+lst('manLook','Homme — look')}
+  if(admTab==='styles'){const all=allTerr(),dis=new Set(ADM.disabled),list=all.filter(t=>admCat==='all'||t.cat===admCat);
+    b=`<div class="seg" style="margin-bottom:10px"><button data-act="admCat" data-c="all" class="${admCat==='all'?'on':''}">Tous (${all.length-ADM.disabled.length}/${all.length})</button>${Object.keys(CATS).map(k=>`<button data-act="admCat" data-c="${k}" class="${admCat===k?'on':''}">${CATS[k][0]}</button>`).join('')}</div>
+    <div class="row" style="margin-bottom:8px"><button class="btn sm" data-act="terrAll">Tout activer</button><button class="btn sm" data-act="resetUsed">Réinitialiser « déjà utilisés »</button></div>
+    ${list.map(t=>`<div class="terr"><input type="checkbox" data-terr="${esc(t.id)}" ${dis.has(t.id)?'':'checked'}><div class="n">${CATS[t.cat]?CATS[t.cat][0]:'✨'} ${esc(t.name)}${S.used[t.id]?' <small style="display:inline">· utilisé</small>':''}<small>${esc(t.prompt)}</small></div>${String(t.id)[0]==='c'?`<button class="btn sm dng" data-act="delTerr" data-id="${esc(t.id)}">✕</button>`:''}</div>`).join('')}
+    <div class="lbl">Ajouter un style</div><select id="nsCat">${Object.keys(CATS).map(k=>`<option value="${k}">${CATS[k][1]}</option>`).join('')}</select><input id="nsName" placeholder="Nom" style="margin:6px 0"><textarea id="nsPrompt" placeholder="Description du style en anglais (époque, matière, lumière, ambiance…)"></textarea><button class="btn pri" style="margin-top:8px;width:100%" data-act="addTerr">Ajouter</button>`}
+  if(admTab==='data'){
+    b=`<div class="lbl">Stockage</div><div class="pre">localStorage : ${KV.ls?'OK':'indisponible'}\nIndexedDB : ${IDB.db?'OK':'indisponible'}\nImages en galerie : ${S.items.length}\nClés : ${Pool.list.length}</div>
+    <div class="lbl">Sauvegarde</div><label class="row" style="margin-bottom:8px"><input type="checkbox" id="expKeys" style="width:20px"> Inclure les clés API</label>
+    <div class="row"><button class="btn grow" data-act="expData">⬇ Exporter</button><button class="btn grow" data-act="impData">⬆ Importer</button></div>
+    <div class="lbl">Nettoyage</div><div class="row"><button class="btn dng grow" data-act="clearGal">Vider la galerie</button><button class="btn dng grow" data-act="clearAll">Tout effacer</button></div>`}
+  $('#v-admin').innerHTML=`<h2 style="margin:6px 0 12px">⚙️ Administration</h2><div class="tabs2">${T.map(([k,l])=>`<button data-act="admTab" data-t="${k}" class="${admTab===k?'on':''}">${l}</button>`).join('')}</div>${b}`}
+
+/* ═════════════ NAVIGATION ═════════════ */
+function showView(v){S.view=v;['studio','films','admin'].forEach(k=>$('#v-'+k).classList.toggle('hide',k!==v));$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  if(v==='films')renderFilms();if(v==='admin')renderAdmin();if(v==='studio')renderGrid();window.scrollTo(0,0)}
+function resetState(){S.items=[];S.byId.clear();S.batches=[];S.films=[];S.active=null}
+async function wipeGallery(){await IDB.clear('items');await IDB.clear('thumbs');MEMB.clear();resetState();S.used={};saveUsed();saveBatches();saveFilms()}
+
+/* ═════════════ ACTIONS ═════════════ */
+function delItem(it,keepKids){
+  if(!keepKids)S.items.filter(x=>x.parentId===it.id).forEach(k=>delItem(k,true));
+  S.items=S.items.filter(x=>x.id!==it.id);S.byId.delete(it.id);IDB.del('items',it.id);IDB.del('thumbs',it.id);MEMB.delete(it.id);releaseThumb(it.id);
+  S.films.forEach(f=>{f.scenes=f.scenes.filter(s=>s.itemId!==it.id)});saveFilms()}
+const curItem=()=>byId(V.cur);
+const ACT={
+  tab:el=>showView(el.dataset.v),
+  goKeys:()=>{showView('studio');openPanel('pKeys');$('#keysIn').focus()},
+  addKeys:()=>addKeysFromInput(),
+  retestKeys:async()=>{if(!Pool.list.length)return;Pool.list.forEach(k=>{if(k.st==='bad')k.err=0;k.st='new'});await Promise.all(Pool.list.map(testKey));toast(Pool.usable().length+' clé(s) utilisable(s)','ok')},
+  delKey:el=>{Pool.list.splice(+el.dataset.i,1);Pool.save();renderKeys();updateHeader();updateCreateInfo()},
+  pickFile:el=>{fileTarget=el.dataset.k;$('#fileIn').click()},
+  clearRef:(el,e)=>{e.stopPropagation();const k=el.dataset.k;S[k]=null;KV.del(k);if(k==='ref'){S.analysis='';KV.del('analysis')}if(k==='ref'&&S.cfg.comp==='ref2'){S.cfg.comp='none';saveCfg()}if(k==='ref2'&&S.cfg.comp==='ref2'){S.cfg.comp='none';saveCfg()}renderPhoto();renderCreate()},
+  toggleText:()=>{S.cfg.textOn=!S.cfg.textOn;saveCfg();renderCreate()},
+  toggleCat:el=>{const c=el.dataset.c;let a=CATSEL().slice();a=a.includes(c)?a.filter(x=>x!==c):a.concat(c);if(!a.length)a=Object.keys(CATS);S.cfg.cats=a.length===Object.keys(CATS).length?null:a;saveCfg();renderCreate()},
+  autoWorkers:()=>{S.cfg.workers=0;saveCfg();renderCreate()},
+  create:async()=>{await ensureAnalysisThenCreate()},
+  open:el=>{const it=byId(el.dataset.id);if(!it)return;if(it.status==='error'||it.status==='cancel'){retry(it);return}if(it.status==='idle'){return}if(it.status==='done')openViewer(it.id)},
+  filterBatch:el=>{S.filter='batch';S.active=el.dataset.b;S.limit=60;renderGrid()},
+  filterFav:()=>{S.filter='fav';S.limit=60;renderGrid()},
+  filterPlans:()=>{S.filter='plans';S.limit=60;renderGrid()},
+  more:()=>{S.limit+=60;renderGrid()},
+  delBatch:async()=>{const b=S.batches.find(x=>x.id===S.active);if(!b||!confirm('Supprimer la série '+b.idx+' et tous ses plans ?'))return;
+    S.items.filter(i=>i.batchId===b.id&&i.kind==='main').forEach(i=>delItem(i));S.batches=S.batches.filter(x=>x.id!==b.id);saveBatches();S.active=S.batches.length?S.batches[S.batches.length-1].id:null;renderGrid()},
+  dlBatch:async()=>{const l=visibleItems().filter(i=>i.status==='done');if(!l.length)return;if(!confirm('Télécharger '+l.length+' images ? Ton navigateur peut demander l\'autorisation de télécharger plusieurs fichiers.'))return;for(const it of l){await download(it);await sleep(450)}},
+  retryErr:()=>{S.items.filter(i=>i.status==='error'&&(S.filter!=='batch'||i.batchId===S.active)).forEach(retry)},
+  pause:()=>{Q.paused=!Q.paused;if(!Q.paused)Q.pump();runbar()},
+  stop:()=>{Q.stop();toast('Génération arrêtée')},
+  closeV:closeViewer,prev:()=>navV(-1),next:()=>navV(1),
+  fav:()=>{const it=curItem();if(!it)return;it.fav=!it.fav;save(it);renderViewer();upd(it);renderStrip()},
+  dl:()=>{const it=curItem();if(it)download(it)},
+  edit:editSheet,cinema:cinemaSheet,more2:moreSheet,
+  kid:el=>{const it=byId(el.dataset.id);if(it&&it.status==='done'){V.cur=it.id;renderViewer()}},
+  variants:()=>{const it=curItem();if(it){runVariants(it,4);}},
+  closeSheet,
+  copyPrompt:()=>{const it=curItem();if(it&&navigator.clipboard)navigator.clipboard.writeText(it.prompt).then(()=>toast('Prompt copié','ok'))},
+  delItem:()=>{const it=curItem();if(!it||!confirm('Supprimer cette image'+(kidsOf(it.id).length?' et ses plans':'')+' ?'))return;closeSheet();const fl=famList(),i=fl.findIndex(x=>x.id===it.id);delItem(it);const nx=fl.filter(x=>x.id!==it.id);if(nx.length){V.cur=nx[Math.min(i,nx.length-1)].id;renderViewer()}else closeViewer();renderGrid()},
+  shot:el=>{const id=el.dataset.id;CS.sel.has(id)?CS.sel.delete(id):CS.sel.add(id);el.classList.toggle('on');updGenSel()},
+  randShots:()=>{CS.sel.clear();shuffle(SHOTOBJ).slice(0,8).forEach(s=>CS.sel.add(s.id));$$('.shotg [data-act="shot"]').forEach(b=>b.classList.toggle('on',CS.sel.has(b.dataset.id)));updGenSel()},
+  ideas:async()=>{const it=curItem();if(!it)return;const b=$('#ideasBtn');b.disabled=true;b.textContent='Le réalisateur réfléchit…';
+    try{CS.ideas=await fetchIdeas(it);CS.selI.clear();renderIdeas();b.textContent='↻ 20 autres idées'}catch(e){b.textContent='Erreur : '+e.message}b.disabled=false},
+  idea:el=>{const i=+el.dataset.i;CS.selI.has(i)?CS.selI.delete(i):CS.selI.add(i);el.classList.toggle('on');updGenSel()},
+  genSel:()=>{const it=curItem();if(!it)return;const specs=[...CS.sel].map(id=>SHOTOBJ.find(s=>s.id===id)).concat([...CS.selI].map(i=>CS.ideas[i]));closeSheet();runShots(it,specs.filter(Boolean))},
+  mkfilm:async()=>{const it=curItem();if(!it)return;const b=$('#filmBtn');b.disabled=true;b.textContent='Écriture du scénario…';
+    try{const f=await makeFilm(it,$('#filmIdea').value.trim());closeSheet();closeViewer();S.filmOpen=f.id;showView('films');toast('Scénario prêt : ajuste-le puis génère les scènes','ok')}
+    catch(e){b.disabled=false;b.textContent='Réessayer : '+e.message}},
+  editChip:el=>{const e=EDITS[+el.dataset.i];const t=$('#editTxt');t.value=e[2];t.focus()},
+  applyEdit:()=>{const it=curItem(),t=$('#editTxt').value.trim();if(!it||!t){toast('Décris la modification','err');return}closeSheet();runEdit(it,t)},
+  filmOpen:el=>{S.filmOpen=el.dataset.id;renderFilms()},
+  filmBack:()=>{S.filmOpen=null;renderFilms()},
+  filmDel:()=>{const f=S.films.find(x=>x.id===S.filmOpen);if(!f||!confirm('Supprimer ce film et ses images ?'))return;f.scenes.forEach(s=>{const it=byId(s.itemId);if(it)delItem(it,true)});S.films=S.films.filter(x=>x!==f);saveFilms();S.filmOpen=null;renderFilms()},
+  filmGenAll:()=>{const f=S.films.find(x=>x.id===S.filmOpen);if(!f)return;if(!Pool.usable().length){toast('Aucune clé valide','err');return}let n=0;f.scenes.forEach(sc=>{const it=byId(sc.itemId);if(it&&it.status!=='done'&&it.status!=='queued'&&it.status!=='running'){genScene(f,sc);n++}});toast(n?n+' scènes en cours…':'Tout est déjà généré','ok');renderFilms()},
+  filmMore:async()=>{const f=S.films.find(x=>x.id===S.filmOpen);if(!f)return;toast('L\'IA écrit la suite…');try{await moreScenes(f);renderFilms()}catch(e){toast(e.message,'err')}},
+  filmTxt:()=>{const f=S.films.find(x=>x.id===S.filmOpen);if(!f)return;downloadText(slug(f.title)+'.txt',`${f.title}\n${f.logline}\n\n${f.synopsis}\n\n`+f.scenes.map((s,i)=>`SCÈNE ${i+1} — ${s.title}\n${s.desc}\n`).join('\n'))},
+  scGen:el=>{const f=S.films.find(x=>x.id===S.filmOpen),sc=f&&scById(f,el.dataset.s);if(!sc)return;genScene(f,sc);renderFilms()},
+  scOpen:el=>{const f=S.films.find(x=>x.id===S.filmOpen),sc=f&&scById(f,el.dataset.s),it=sc&&byId(sc.itemId);if(!it)return;if(it.status==='done')openViewer(it.id,f.scenes.map(s=>byId(s.itemId)).filter(Boolean));else if(it.status==='idle'||it.status==='error'||it.status==='cancel'){genScene(f,sc);renderFilms()}},
+  scDel:el=>{const f=S.films.find(x=>x.id===S.filmOpen),sc=f&&scById(f,el.dataset.s);if(!sc)return;const it=byId(sc.itemId);if(it)delItem(it,true);f.scenes=f.scenes.filter(s=>s!==sc);saveFilms();renderFilms()},
+  scUp:el=>moveScene(el,-1),scDown:el=>moveScene(el,1),
+  admTab:el=>{admTab=el.dataset.t;renderAdmin()},
+  admCat:el=>{admCat=el.dataset.c;renderAdmin()},
+  resetPrompts:()=>{if(!confirm('Réinitialiser tous les prompts ?'))return;['face','free','woman','man','text','qual','sys'].forEach(k=>ADM[k]=DEF[k]);ADM.exprs=Object.assign({},DEF.exprs);saveAdmin();renderAdmin()},
+  terrAll:()=>{ADM.disabled=[];saveAdmin();renderAdmin()},
+  resetUsed:()=>{S.used={};saveUsed();renderAdmin();toast('Tous les styles sont de nouveau disponibles','ok')},
+  addTerr:()=>{const n=$('#nsName').value.trim(),p=$('#nsPrompt').value.trim();if(!n||!p){toast('Nom et description requis','err');return}ADM.custom.push({id:'c'+uid(),cat:$('#nsCat').value,name:n,prompt:p});saveAdmin();renderAdmin();toast('Style ajouté','ok')},
+  delTerr:el=>{ADM.custom=ADM.custom.filter(t=>t.id!==el.dataset.id);saveAdmin();renderAdmin()},
+  expData:()=>exportData(),
+  impData:()=>$('#importIn').click(),
+  clearGal:async()=>{if(confirm('Supprimer toutes les images, séries et films ?')){closeViewer();await wipeGallery();renderStrip();renderGrid();renderAdmin();toast('Galerie vidée','ok')}},
+  clearAll:async()=>{if(!confirm('Tout effacer : clés, photo, réglages, images ?'))return;closeViewer();await wipeGallery();for(const k of Object.keys(KV.cache))KV.del(k);Pool.list=[];S.ref=S.ref2=null;S.analysis='';S.cfg=Object.assign({},CFG0);loadAdmin();boot2();toast('Tout a été effacé','ok')}};
+function moveScene(el,d){const f=S.films.find(x=>x.id===S.filmOpen);if(!f)return;const i=f.scenes.findIndex(s=>s.id===el.dataset.s),j=i+d;if(i<0||j<0||j>=f.scenes.length)return;[f.scenes[i],f.scenes[j]]=[f.scenes[j],f.scenes[i]];saveFilms();renderFilms()}
+function renderIdeas(){$('#ideasBox').innerHTML=CS.ideas.map((x,i)=>`<button class="idea" data-act="idea" data-i="${i}"><span class="ck">✓</span><span><b>${esc(x.label)}</b><small>${esc((x.t||'').slice(0,110))}</small></span></button>`).join('');updGenSel()}
+async function ensureAnalysisThenCreate(){
+  if(!Pool.usable().length){toast('Ajoute au moins une clé API','err');openPanel('pKeys');return}
+  if(!S.ref){toast('Ajoute d\'abord une photo','err');openPanel('pPhoto');return}
+  Q.paused=false;const p=ensureAnalysis();await Promise.race([p,sleep(0)]);
+  const prom=createBatch();await p;await prom}
+function exportData(){
+  const inc=$('#expKeys')&&$('#expKeys').checked;
+  const data={v:8,cfg:S.cfg,admin:ADM,films:S.films,batches:S.batches,used:S.used,analysis:S.analysis,ref:S.ref,ref2:S.ref2,items:S.items.map(i=>{const c=Object.assign({},i);Object.keys(c).forEach(k=>{if(k[0]==='_')delete c[k]});return c}),keys:inc?Pool.list.map(k=>k.key):undefined};
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'}));a.download='style-forge-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove()}
+async function importData(file){
+  try{const d=JSON.parse(await file.text());if(!d||d.v!==8)throw new Error('Format inconnu');
+    if(d.cfg){S.cfg=Object.assign({},CFG0,d.cfg);saveCfg()}if(d.admin){ADM=Object.assign(JSON.parse(JSON.stringify(DEF)),d.admin);saveAdmin()}
+    if(d.keys&&d.keys.length){Pool.add(d.keys)}
+    if(d.ref){S.ref=d.ref;KV.set('ref',d.ref)}if(d.ref2){S.ref2=d.ref2;KV.set('ref2',d.ref2)}if(d.analysis){S.analysis=d.analysis;KV.set('analysis',d.analysis)}
+    if(d.used){S.used=d.used;saveUsed()}
+    const ids=new Set(S.items.map(i=>i.id));(d.items||[]).forEach(it=>{if(ids.has(it.id))return;if(['running','queued','concept'].includes(it.status))it.status='cancel';it.thumb=false;addItem(it);makeThumbSoon(it)});
+    (d.batches||[]).forEach(b=>{if(!S.batches.some(x=>x.id===b.id))S.batches.push(b)});saveBatches();
+    (d.films||[]).forEach(f=>{if(!S.films.some(x=>x.id===f.id))S.films.push(f)});saveFilms();
+    S.active=S.batches.length?S.batches[S.batches.length-1].id:null;boot2();toast('Import terminé','ok')}
+  catch(e){toast('Import impossible : '+e.message,'err')}}
+function makeThumbSoon(it){if(it.status==='done'&&it.url)makeThumb(it)}
+
+/* ═════════════ ÉVÉNEMENTS ═════════════ */
+document.addEventListener('click',e=>{
+  const sg=e.target.closest('[data-seg]');
+  if(sg){const k=sg.dataset.seg;let v=sg.dataset.v;if(k==='n')v=+v;S.cfg[k]=v;saveCfg();
+    if(k==='shotRatio'){$$('[data-seg="shotRatio"]').forEach(b=>b.classList.toggle('on',b.dataset.v===v))}else{renderCreate();renderKeys()}return}
+  const a=e.target.closest('[data-act]');if(a&&ACT[a.dataset.act]){ACT[a.dataset.act](a,e)}});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.dataset.cfg){let v=t.value;if(t.dataset.cfg==='workers'){v=Math.round(+v)||0;if(v===autoWorkers())v=0;t.value=v||autoWorkers()}S.cfg[t.dataset.cfg]=v;saveCfg();if(t.dataset.cfg==='workers'){updateCreateInfo();Q.pump()}}
+  else if(t.dataset.adm){ADM[t.dataset.adm]=t.value;saveAdmin()}
+  else if(t.dataset.admx){ADM.exprs[t.dataset.admx]=t.value;saveAdmin()}
+  else if(t.dataset.admL){ADM[t.dataset.admL]=t.value.split(',').map(s=>s.trim()).filter(Boolean);saveAdmin()}
+  else if(t.dataset.terr!==undefined){const id=t.dataset.terr;ADM.disabled=ADM.disabled.filter(x=>x!==id);if(!t.checked)ADM.disabled.push(id);saveAdmin();renderAdmin()}
+  else if(t.dataset.ff){const f=S.films.find(x=>x.id===S.filmOpen);if(f){f[t.dataset.ff]=t.value;saveFilms()}}
+  else if(t.dataset.sc){const f=S.films.find(x=>x.id===S.filmOpen),sc=f&&scById(f,t.dataset.sc);if(sc){sc[t.dataset.f]=t.value;saveFilms();if(t.dataset.f==='title'){const it=byId(sc.itemId);if(it){it.title=t.value;save(it)}}}}
+  else if(t.id==='fileIn'){const f=t.files[0];t.value='';setPhoto(f,fileTarget)}
+  else if(t.id==='importIn'){const f=t.files[0];t.value='';if(f)importData(f)}});
+document.addEventListener('input',e=>{if(e.target.dataset.cfg==='text'){S.cfg.text=e.target.value;saveCfg()}});
+document.addEventListener('keydown',e=>{if(V.open&&!$('#sheet').innerHTML){if(e.key==='ArrowLeft')navV(-1);else if(e.key==='ArrowRight')navV(1);else if(e.key==='Escape')closeViewer()}else if(e.key==='Escape')closeSheet()});
+document.addEventListener('paste',e=>{if(e.target.id==='keysIn')setTimeout(addKeysFromInput,30)});
+['dragover','drop'].forEach(ev=>document.addEventListener(ev,e=>{const d=e.target.closest&&e.target.closest('.drop');if(!d)return;e.preventDefault();if(ev==='drop'){const k=d.dataset.k||d.dataset.drop||'ref';const f=e.dataTransfer.files[0];if(f)setPhoto(f,k)}}));
+window.addEventListener('beforeunload',e=>{if(pending()>0){e.preventDefault();e.returnValue=''}});
+
+/* ═════════════ DÉMARRAGE ═════════════ */
+function boot2(){
+  Pool.load();updateHeader();renderKeys();renderPhoto();renderCreate();
+  $('#gallery').innerHTML='<div class="strip hide" id="strip"></div><div id="gridwrap"></div>';
+  if(!S.active&&S.batches.length)S.active=S.batches[S.batches.length-1].id;
+  renderGrid();runbar();if(S.view==='films')renderFilms();if(S.view==='admin')renderAdmin()}
+(async function init(){
+  await KV.init();loadAdmin();
+  S.cfg=Object.assign({},CFG0,KV.get('cfg',{}));S.ref=KV.get('ref',null);S.ref2=KV.get('ref2',null);S.analysis=KV.get('analysis','');
+  S.batches=KV.get('batches',[]);S.films=KV.get('films',[]);S.used=KV.get('used',{});
+  const saved=await IDB.all('items');saved.sort((a,b)=>a.t-b.t);
+  saved.forEach(it=>{if(['running','queued','concept'].includes(it.status))it.status='cancel';S.items.push(it);S.byId.set(it.id,it)});
+  boot2();
+  // repli automatique : si tout est prêt, on replie les étapes 1 et 2 pour laisser la place à la création
+  if(Pool.usable().length&&S.ref){$('#pKeys').open=false;$('#pPhoto').open=false}
+  // teste en arrière-plan les clés jamais testées
+  Pool.list.filter(k=>k.st==='new').forEach(testKey);
+  window.SF={S,Pool,Q,KV,ADM:()=>ADM}})();
+
+</script>
+</body>
+</html>
