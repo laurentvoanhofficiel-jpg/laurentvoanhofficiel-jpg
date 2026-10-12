@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0d0d0f">
+<title>Style Forge v2</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+--bg:#0d0d0f;--bg2:#141417;--bg3:#1c1c21;--line:#26262c;--line2:#33333c;
+--fg:#f2f2f4;--fg2:#b8b8c0;--mut:#7c7c88;--faint:#55555f;
+--gold:#e6b45a;--ok:#4cc38a;--err:#e05555;--warn:#d8983f;
+--r:14px;--rs:10px;--mono:ui-monospace,Menlo,Consolas,monospace;
+}
+html,body{background:var(--bg);color:var(--fg)}
+body{font:15px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;max-width:820px;margin:0 auto;padding-bottom:110px;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,textarea,select{font-family:inherit;color:var(--fg)}
+img{display:block;max-width:100%}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:var(--line2);border-radius:3px}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:50;background:rgba(13,13,15,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+header h1{font-size:18px;font-weight:800;letter-spacing:-.02em}
+header h1 em{color:var(--gold);font-style:normal}
+header .sub{font-size:11px;color:var(--mut);margin-top:1px}
+.statchip{display:flex;align-items:center;gap:7px;padding:6px 12px;border-radius:100px;background:var(--bg3);border:1px solid var(--line);font-size:12px;font-weight:600;white-space:nowrap}
+.statchip .dot{width:7px;height:7px;border-radius:50%;background:var(--faint)}
+.statchip.run{border-color:rgba(76,195,138,.4);color:var(--ok)}
+.statchip.run .dot{background:var(--ok);animation:pul 1.6s infinite}
+@keyframes pul{50%{opacity:.35}}
+
+main{padding:14px 16px}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
+.card summary{padding:14px 16px;cursor:pointer;user-select:none;list-style:none;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px}
+.card summary::-webkit-details-marker{display:none}
+.card summary .ico{font-size:16px}
+.card summary .cnt{font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;background:var(--bg3);color:var(--mut);margin-left:auto}
+.card summary .arr{color:var(--faint);font-size:11px;transition:transform .15s}
+.card[open] summary .arr{transform:rotate(180deg)}
+.card .content{padding:0 16px 16px}
+
+/* FORM */
+.f{margin-bottom:14px}
+.f label{display:block;font-size:11px;font-weight:700;color:var(--fg2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.f .hint{font-size:11.5px;color:var(--mut);margin-top:5px;line-height:1.45}
+input[type=text],input[type=number],textarea,select{width:100%;padding:11px 13px;border:1px solid var(--line2);border-radius:var(--rs);background:var(--bg3);color:var(--fg);font-size:14px;appearance:none;-webkit-appearance:none}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold)}
+textarea{font-family:var(--mono);font-size:12px;min-height:76px;resize:vertical;line-height:1.55}
+select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='7'><path fill='%237c7c88' d='M5 7L0 0h10z'/></svg>");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+input[type=number]{text-align:center}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{padding:8px 13px;border-radius:100px;border:1px solid var(--line2);background:var(--bg3);color:var(--fg2);font-size:12.5px;font-weight:600}
+.seg button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:var(--rs);border:1px solid var(--line2);background:var(--bg3);color:var(--fg);font-size:14px;font-weight:700;min-height:48px;transition:.15s}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.pri{background:var(--fg);color:#0a0a0c;border-color:var(--fg)}
+.btn.gold{background:var(--gold);color:#1a1408;border-color:var(--gold)}
+.btn.dng{border-color:rgba(224,85,85,.5);color:var(--err)}
+.btn.sm{padding:8px 13px;font-size:12px;min-height:38px;width:auto}
+.brow{display:flex;gap:8px}.brow .btn{flex:1}
+
+/* KEYS */
+.keyslist{max-height:220px;overflow-y:auto;border:1px solid var(--line);border-radius:var(--rs);margin-top:10px;background:var(--bg3)}
+.kitem{display:flex;align-items:center;gap:9px;padding:9px 12px;border-bottom:1px solid var(--line);font-size:12px}
+.kitem:last-child{border:0}
+.kitem .id{font-family:var(--mono);color:var(--fg2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kitem .req{font-family:var(--mono);color:var(--faint);font-size:11px}
+.kst{font-size:9.5px;font-weight:800;padding:3px 8px;border-radius:100px;letter-spacing:.04em;text-transform:uppercase;flex-shrink:0}
+.kst.ok{background:rgba(76,195,138,.14);color:var(--ok)}
+.kst.cool{background:rgba(216,152,63,.14);color:var(--warn)}
+.kst.dead{background:rgba(224,85,85,.14);color:var(--err)}
+.cap{padding:10px 12px;background:rgba(230,180,90,.08);border:1px solid rgba(230,180,90,.25);border-radius:var(--rs);font-size:12px;color:var(--gold);margin-top:10px;line-height:1.55}
+.saveok{display:flex;align-items:center;gap:7px;margin-top:8px;font-size:12px;color:var(--ok);min-height:18px}
+
+/* DROP */
+.drop{position:relative;border:2px dashed var(--line2);border-radius:var(--r);padding:30px 18px;text-align:center;cursor:pointer;transition:.15s;overflow:hidden}
+.drop:hover{border-color:var(--gold)}
+.drop.has{padding:0;border-style:solid;border-color:var(--gold)}
+.drop input[type=file]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2}
+.drop.has input[type=file]{display:none}
+.drop .ic{font-size:30px;margin-bottom:8px}
+.drop .ti{font-weight:700}
+.drop .de{font-size:12px;color:var(--mut);margin-top:3px;line-height:1.4;position:relative;z-index:1}
+.drop .prev{position:relative}
+.drop img{width:100%;max-height:320px;object-fit:contain;background:#000}
+.drop .rm{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.75);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);z-index:3;border:1px solid rgba(255,255,255,.2)}
+
+/* SERIES TABS */
+#seriesBar{display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none}
+#seriesBar::-webkit-scrollbar{display:none}
+.stab{padding:7px 13px;border-radius:100px;border:1px solid var(--line2);background:var(--bg2);color:var(--fg2);font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.stab.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.stab .n{font-family:var(--mono);opacity:.7;margin-left:4px}
+
+/* ══ BLOCS IMAGE pleine largeur, options SOUS l'image ══ */
+#stream{display:flex;flex-direction:column;gap:14px}
+.blk{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;animation:bIn .3s ease}
+@keyframes bIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.blk.err{border-color:rgba(224,85,85,.5)}
+.bhead{padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.bcat{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:100px;background:var(--fg);color:var(--bg);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.bname{flex:1;min-width:120px;font-weight:700;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bbadges{display:flex;gap:4px}
+.bbadges i{font-style:normal;font-size:9.5px;font-weight:800;padding:2px 6px;border-radius:4px;background:rgba(230,180,90,.9);color:#1a1408}
+.btime{font-size:10.5px;color:var(--faint);font-family:var(--mono);margin-left:auto}
+.bimg{background:#000;display:flex;align-items:center;justify-content:center;min-height:200px;position:relative}
+.bimg img{width:100%;height:auto;max-height:78vh;object-fit:contain;cursor:default}
+.bimg .load{width:26px;height:26px;border:3px solid var(--line2);border-top-color:var(--gold);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.bimg .errmsg{padding:24px;text-align:center;color:var(--err);font-size:12.5px}
+/* barre d'actions inline sous l'image */
+.bacts{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;border-top:1px solid var(--line);scrollbar-width:none}
+.bacts::-webkit-scrollbar{display:none}
+.bact{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:100px;border:1px solid var(--line2);background:var(--bg3);color:var(--fg2);font-size:12px;font-weight:700}
+.bact .i{font-size:14px}
+.bact:active{transform:scale(.96)}
+.bact.gold{background:var(--gold);color:#1a1408;border-color:var(--gold)}
+/* zone dépliable (prompt libre / cinéma) */
+.bmore{border-top:1px solid var(--line);padding:12px;background:var(--bg3)}
+.bmore textarea{min-height:64px;margin-bottom:8px}
+.pitch{padding:11px 13px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--rs);margin-bottom:7px;cursor:pointer}
+.pitch .pt{font-weight:700;font-size:13px;display:flex;justify-content:space-between;gap:8px}
+.pitch .pt .mk{font-size:16px;color:var(--faint)}
+.pitch.on{border-color:var(--gold);background:rgba(230,180,90,.08)}
+.pitch.on .pt .mk{color:var(--gold)}
+.pitch .pd{font-size:12px;color:var(--mut);margin-top:3px;line-height:1.4}
+.bmsg{margin-top:10px;padding:9px 12px;border-radius:var(--rs);font-size:12.5px;display:none}
+.bmsg.on{display:block}
+.bmsg.ok{background:rgba(76,195,138,.12);color:var(--ok)}
+.bmsg.err{background:rgba(224,85,85,.12);color:var(--err)}
+.empty{text-align:center;padding:56px 20px;color:var(--faint)}
+.empty .ic{font-size:40px;display:block;margin-bottom:10px}
+.empty .t{font-weight:700;color:var(--fg2);margin-bottom:5px}
+.empty .s{font-size:13px;line-height:1.5;max-width:380px;margin:0 auto}
+
+/* BATCH */
+#batchDone{display:none;background:var(--bg2);border:1px solid var(--gold);border-radius:var(--r);padding:18px;text-align:center;margin:0 0 14px}
+#batchDone .t{font-weight:800;font-size:16px}
+#batchDone .s{font-size:12.5px;color:var(--mut);margin:6px 0 14px}
+
+/* BOTTOM BAR */
+#bar{position:fixed;bottom:0;left:0;right:0;max-width:820px;margin:0 auto;background:rgba(13,13,15,.96);backdrop-filter:blur(16px);border-top:1px solid var(--line);padding:10px 16px 14px;z-index:60}
+.brow2{display:flex;align-items:center;gap:10px}
+.bbtn{width:48px;height:48px;border-radius:var(--rs);border:1px solid var(--line2);background:var(--bg3);font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bbtn.play{background:var(--gold);color:#1a1408;border-color:var(--gold)}
+.bbtn.pause{background:var(--warn);color:#fff;border-color:var(--warn)}
+.bbtn:disabled{opacity:.35}
+.binfo{flex:1;min-width:0}
+.binfo .l1{display:flex;align-items:baseline;gap:8px}
+.binfo .cnt{font-size:21px;font-weight:800;font-family:var(--mono)}
+.binfo .lbl{font-size:10px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.binfo .eta{font-size:11px;font-family:var(--mono);color:var(--faint);margin-left:auto;white-space:nowrap}
+.binfo .stt{font-size:11px;color:var(--mut);font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+.prog{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:6px}
+.prog i{display:block;height:100%;width:0;background:var(--gold);transition:width .3s}
+
+/* MODALS (uniquement historique + admin) */
+.modal{position:fixed;inset:0;background:var(--bg);z-index:300;display:none;overflow-y:auto;padding-bottom:90px}
+.modal.on{display:block}
+.mh{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px;z-index:5}
+.mh h3{font-size:16px;font-weight:800;flex:1}
+.mh .cnt{font-size:12px;font-family:var(--mono);color:var(--mut)}
+.mh .x{width:36px;height:36px;border-radius:50%;background:var(--bg3);border:1px solid var(--line);font-size:14px;color:var(--fg2)}
+.mtabs{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;border-bottom:1px solid var(--line);position:sticky;top:61px;background:var(--bg);z-index:4}
+.mtab{padding:8px 14px;border-radius:100px;border:1px solid var(--line2);background:var(--bg2);color:var(--fg2);font-size:12.5px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.mtab.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.mb{padding:16px}
+.arow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+.arow label{color:var(--fg2)}
+.arow input[type=number]{width:80px}
+.arow input[type=checkbox]{width:20px;height:20px;accent-color:var(--gold)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:100px;border:1px solid var(--line2);background:var(--bg3);color:var(--fg2);font-size:12px;font-weight:600}
+.chip.on{background:var(--gold);color:#1a1408;border-color:var(--gold)}
+.chip .x{font-size:13px;opacity:.6}
+.chipadd{display:flex;gap:8px;margin-top:10px}
+.chipadd input{flex:1}
+.chipadd button{width:auto;padding:0 14px;min-height:44px;flex-shrink:0;background:var(--bg3);border:1px solid var(--line2);border-radius:var(--rs);color:var(--fg);font-weight:700;font-size:12px}
+.hgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:12px 16px}
+@media(min-width:640px){.hgrid{grid-template-columns:repeat(5,1fr)}}
+.hcell{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--bg3);cursor:pointer;border:1px solid var(--line)}
+.hcell img{width:100%;height:100%;object-fit:cover}
+.hcell .l{position:absolute;bottom:0;left:0;right:0;padding:14px 5px 4px;background:linear-gradient(transparent,rgba(0,0,0,.85));color:#fff;font-size:9px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* TOAST */
+#toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-120px);background:var(--fg);color:#0a0a0c;padding:11px 18px;border-radius:100px;font-size:13px;font-weight:700;z-index:999;opacity:0;transition:.28s cubic-bezier(.2,.9,.3,1.1);max-width:88vw;pointer-events:none}
+#toast.on{opacity:1;transform:translateX(-50%)}
+#toast.err{background:var(--err);color:#fff}
+#toast.warn{background:var(--warn);color:#fff}
+
+/* LOG */
+#logw{margin:16px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+#logw summary{padding:10px 14px;cursor:pointer;font-size:12px;font-weight:700;color:var(--mut);list-style:none}
+#logw summary::-webkit-details-marker{display:none}
+#log{max-height:160px;overflow-y:auto;background:var(--bg2);border-top:1px solid var(--line);padding:8px 12px;font-family:var(--mono);font-size:10.5px;line-height:1.6;color:var(--fg2)}
+#log .l{word-break:break-word;padding:1px 0}
+#log .l.s{color:var(--ok)}
+#log .l.e{color:var(--err)}
+#log .l.w{color:var(--warn)}
+#log .t{color:var(--faint);margin-right:6px}
+</style>
+</head>
+<body>
+
+<header>
+<div>
+<h1>Style <em>Forge</em> v2</h1>
+<p class="sub">Ta photo → milliers de plans · tout est sauvegardé dans le navigateur</p>
+</div>
+<div class="statchip" id="chip"><span class="dot"></span><span id="chipTx">Prêt</span></div>
+</header>
+
+<main>
+
+<details class="card" open id="cKeys">
+<summary><span class="ico">🔑</span> Clés API <span class="cnt" id="keyBadge">0</span><span class="arr">▾</span></summary>
+<div class="content">
+<div class="f">
+<label>Une clé par ligne — sauvegarde automatique</label>
+<textarea id="keysIn" rows="4" placeholder="sk-xxxx&#10;sk-yyyy&#10;sk-zzzz" spellcheck="false" autocomplete="off"></textarea>
+<div class="saveok" id="saveOk"></div>
+<div class="hint">Rotation auto : chaque requête part sur la clé la moins sollicitée.</div>
+</div>
+<div class="keyslist" id="keysList" style="display:none"></div>
+<div class="cap" id="capBox" style="display:none"></div>
+</div>
+</details>
+
+<details class="card" open id="cSet">
+<summary><span class="ico">⚙️</span> Réglages <span class="arr">▾</span></summary>
+<div class="content">
+
+<div class="f">
+<label>Taille de série (images par lot)</label>
+<div class="seg" id="batchSeg">
+<button data-v="20">20</button>
+<button data-v="40" class="on">40</button>
+<button data-v="60">60</button>
+<button data-v="80">80</button>
+</div>
+</div>
+
+<div class="f">
+<label>Format</label>
+<select id="ratio">
+<option value="1:1" selected>⬛ Carré 1:1</option>
+<option value="9:16">📱 Portrait 9:16</option>
+<option value="16:9">🖥️ Paysage 16:9</option>
+<option value="4:3">🖼️ Paysage 4:3</option>
+<option value="3:4">📖 Portrait 3:4</option>
+<option value="mixed">🎲 Mélangé</option>
+</select>
+</div>
+
+<div class="f">
+<label>Résolution</label>
+<select id="sizeSel">
+<option value="1K" selected>1K · rapide (20 RPM/clé)</option>
+<option value="2K">2K · qualité (5 RPM/clé)</option>
+</select>
+</div>
+
+<div class="f">
+<label>Diversité des images</label>
+<div class="seg" id="divSeg">
+<button data-v="0.3">Classique</button>
+<button data-v="0.6" class="on">Fou</button>
+<button data-v="0.85">Délirant</button>
+</div>
+<div class="hint">Probabilité de fusion de styles improbables. Le visage reste TOUJOURS identique.</div>
+</div>
+
+<div class="f">
+<label>Compagnon·e sur l'image</label>
+<select id="compSel">
+<option value="0" selected>Solo</option>
+<option value="woman">Toujours + une femme</option>
+<option value="man">Toujours + un homme</option>
+<option value="both">Mixte femme/homme aléatoire</option>
+</select>
+<div class="hint">Descriptions dans Admin → Femme / Homme.</div>
+</div>
+
+<div class="f">
+<label>Saut dans l'espace</label>
+<select id="spaceSel">
+<option value="0.1" selected>Rare (1/10)</option>
+<option value="0.05">Très rare</option>
+<option value="0.3">Fréquent</option>
+<option value="0">Jamais</option>
+</select>
+</div>
+
+<div class="f">
+<label>Texte sur vêtement</label>
+<select id="txtSel">
+<option value="yes">Toujours</option>
+<option value="sometimes" selected>Parfois</option>
+<option value="no">Jamais</option>
+</select>
+</div>
+
+<div class="f">
+<label>Workers par clé</label>
+<input type="number" id="wPerKey" value="2" min="1" max="4">
+<div class="hint" id="wHint"></div>
+</div>
+
+<div class="f">
+<label>Intervalle min. entre requêtes par clé (ms)</label>
+<input type="number" id="interval" value="3000" min="500" max="20000" step="500">
+</div>
+
+</div>
+</details>
+
+<details class="card" open id="cPhoto">
+<summary><span class="ico">📸</span> Ta photo <span class="cnt" id="phBadge">—</span><span class="arr">▾</span></summary>
+<div class="content">
+<div class="drop" id="drop">
+<input type="file" accept="image/*" id="fileIn">
+<div class="ic">📷</div>
+<div class="ti">Choisir ma photo</div>
+<div class="de">Visage bien visible, face caméra.<br>Le visage sera préservé sur 100 % des images.</div>
+</div>
+</div>
+</details>
+
+<div class="brow" style="margin-bottom:14px">
+<button class="btn gold" id="startBtn" disabled>⚡ Forge une série</button>
+<button class="btn" id="histBtn" style="flex:0 0 54px" title="Historique">📜</button>
+<button class="btn" id="adminBtn" style="flex:0 0 54px" title="Admin">⚙️</button>
+</div>
+
+<nav id="seriesBar" style="display:none"></nav>
+<div id="batchDone">
+<div class="t">✨ Série terminée</div>
+<div class="s" id="batchDoneSub"></div>
+<button class="btn gold" id="nextBatchBtn">▶ Continuer — série suivante</button>
+</div>
+
+<section id="stream"></section>
+
+<div class="empty" id="empty">
+<span class="ic">🎬</span>
+<div class="t">Le studio est vide</div>
+<div class="s">Colle tes clés, choisis ta photo, forge ta première série. Chaque image affichée en pleine largeur avec ses options juste dessous. Tout est stocké dans IndexedDB : rien ne se perd, même si tu fermes Chrome.</div>
+</div>
+
+<div id="storageInfo" class="cap" style="display:none;margin:16px"></div>
+
+<details id="logw">
+<summary>🛠 Journal technique</summary>
+<div id="log"></div>
+</details>
+
+</main>
+
+<nav id="bar">
+<div class="brow2">
+<button class="bbtn play" id="playBtn" disabled>▶</button>
+<button class="bbtn pause" id="pauseBtn" style="display:none">⏸</button>
+<div class="binfo">
+<div class="l1"><span class="cnt" id="bCount">0</span><span class="lbl">images</span><span class="eta" id="bEta"></span></div>
+<div class="stt" id="bStat">Prêt · appuie sur ▶</div>
+<div class="prog"><i id="bProg"></i></div>
+</div>
+</div>
+</nav>
+
+<div class="modal" id="histM">
+<div class="mh"><h3>📜 Toutes mes images</h3><span class="cnt" id="histCnt">0</span><button class="x" id="histX">✕</button></div>
+<div class="hgrid" id="hGrid"></div>
+</div>
+
+<div class="modal" id="admM">
+<div class="mh"><h3>⚙️ Administration</h3><button class="x" id="admX">✕</button></div>
+<div class="mtabs">
+<button class="mtab on" data-t="prompts">📝 Prompts</button>
+<button class="mtab" data-t="woman">👩 Femme</button>
+<button class="mtab" data-t="man">👨 Homme</button>
+<button class="mtab" data-t="texts">✍️ Textes</button>
+<button class="mtab" data-t="db">📚 Styles & IA</button>
+<button class="mtab" data-t="data">💾 Données</button>
+</div>
+<div class="mb" id="admBody"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+/* ════════════════════════════════════════════════════════════════
+   CONFIG
+════════════════════════════════════════════════════════════════ */
+var API='https://apihub.agnes-ai.com/v1';
+var MODEL_TX='agnes-2.5-flash';
+var MODEL_IMG='agnes-image-2.1-flash';
+var LS={keys:'sf2_keys',db:'sf2_db',adm:'sf2_adm',cfg:'sf2_cfg',photo:'sf2_photo'};
+var IDB_NAME='styleforge2',IDB_VER=1;
+
+function $(id){return document.getElementById(id)}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]})}
+function nowT(){return new Date().toLocaleTimeString('fr-FR',{hour12:false})}
+function rnd(a){return a[Math.floor(Math.random()*a.length)]}
+function stamp(){var d=new Date(),p=function(n){return String(n).padStart(2,'0')};return d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'_'+p(d.getHours())+p(d.getMinutes())+p(d.getSeconds())}
+function safe(s){return String(s||'style').replace(/[^a-z0-9\-_]+/gi,'_').replace(/_+/g,'_').slice(0,36)}
+
+var toastT;
+function toast(m,t){var el=$('toast');el.textContent=m;el.className='on '+(t||'');clearTimeout(toastT);toastT=setTimeout(function(){el.className=''},2600)}
+function log(m,lv){var c=$('log');if(!c)return;var d=document.createElement('div');d.className='l '+(lv||'');d.innerHTML='<span class="t">'+nowT()+'</span>'+esc(m);c.appendChild(d);while(c.children.length>120)c.removeChild(c.firstChild);c.scrollTop=c.scrollHeight}
+
+/* ════════════════════════════════════════════════════════════════
+   INDEXEDDB — stockage durable de TOUT (images + séries)
+════════════════════════════════════════════════════════════════ */
+var idb=null;
+function idbOpen(){
+  return new Promise(function(res,rej){
+    if(idb)return res(idb);
+    if(!window.indexedDB)return rej(new Error('IndexedDB indisponible'));
+    var rq=indexedDB.open(IDB_NAME,IDB_VER);
+    rq.onupgradeneeded=function(e){
+      var d=e.target.result;
+      if(!d.objectStoreNames.contains('images'))d.createObjectStore('images',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('series'))d.createObjectStore('series',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('kv'))d.createObjectStore('kv');
+    };
+    rq.onsuccess=function(e){idb=e.target.result;res(idb)};
+    rq.onerror=function(){rej(rq.error||new Error('open fail'))};
+  });
+}
+function idbPut(store,val,key){
+  return idbOpen().then(function(db){
+    return new Promise(function(res,rej){
+      var tx=db.transaction(store,'readwrite');
+      if(key!==undefined)tx.objectStore(store).put(val,key);
+      else tx.objectStore(store).put(val);
+      tx.oncomplete=function(){res(true)};
+      tx.onerror=function(){rej(tx.error)};
+    });
+  });
+}
+function idbGet(store,key){
+  return idbOpen().then(function(db){
+    return new Promise(function(res,rej){
+      var rq=db.transaction(store).objectStore(store).get(key);
+      rq.onsuccess=function(){res(rq.result)};
+      rq.onerror=function(){rej(rq.error)};
+    });
+  });
+}
+function idbGetAll(store){
+  return idbOpen().then(function(db){
+    return new Promise(function(res,rej){
+      var rq=db.transaction(store).objectStore(store).getAll();
+      rq.onsuccess=function(){res(rq.result||[])};
+      rq.onerror=function(){rej(rq.error)};
+    });
+  });
+}
+function idbDel(store,key){
+  return idbOpen().then(function(db){
+    return new Promise(function(res,rej){
+      var tx=db.transaction(store,'readwrite');
+      tx.objectStore(store).delete(key);
+      tx.oncomplete=function(){res(true)};
+      tx.onerror=function(){rej(tx.error)};
+    });
+  });
+}
+/* Enregistre une image : blob + métadonnées → jamais perdue */
+function saveImage(item){
+  return fetch(item.url,{mode:'cors'}).then(function(r){return r.blob()}).then(function(blob){
+    return idbPut('images',{id:item.id,blob:blob,meta:{
+      cat:item.cat,style:item.style,ratio:item.ratio,seriesId:item.seriesId,
+      fname:item.fname,time:item.time,badges:item.badges,sub:item.sub||false,prompt:item.prompt
+    }});
+  }).then(function(){item.saved=true;return true}).catch(function(){
+    log('Image non mise en cache (CORS) : '+item.style.slice(0,30),'w');
+    return idbPut('images',{id:item.id,blob:null,url:item.url,meta:{
+      cat:item.cat,style:item.style,ratio:item.ratio,seriesId:item.seriesId,
+      fname:item.fname,time:item.time,badges:item.badges,sub:item.sub||false,prompt:item.prompt
+    }}).then(function(){item.saved=true});
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════
+   DATA — catégories & styles
+════════════════════════════════════════════════════════════════ */
+var CATS={
+cinema:{n:'Cinéma',i:'🎬'},shock:{n:'Choc',i:'💥'},peinture:{n:'Peinture',i:'🎨'},
+pop:{n:'Pop',i:'💣'},ill:{n:'Illustration',i:'📚'},manga:{n:'Manga',i:'🌸'},
+action:{n:'Action',i:'🥋'},num:{n:'Numérique',i:'🖥️'},retro:{n:'Rétro',i:'📼'},
+abs:{n:'Abstrait',i:'🌀'},lum:{n:'Lumière',i:'💡'},col:{n:'Couleur',i:'🌈'},eff:{n:'Effets',i:'⚡'}
+};
+var BASE=[
+['wes','cinema','Wes Anderson','Wes Anderson style, bilateral symmetry, pastel palette, deadpan set, 35mm film grain'],
+['kub','cinema','Kubrick','Stanley Kubrick style, one-point perspective, cold symmetry, clinical lighting'],
+['kuro','cinema','Kurosawa','Kurosawa style, dynamic weather, samurai stillness, elemental landscape'],
+['lynch','cinema','David Lynch','David Lynch style, suburban uncanny, red curtains, dream logic, surreal'],
+['burt','cinema','Tim Burton','Tim Burton style, gothic whimsy, striped palettes, crooked architecture'],
+['vill','cinema','Villeneuve','Denis Villeneuve style, monumental architecture, muted palette, vast scale'],
+['scott','cinema','Ridley Scott','Ridley Scott style, industrial haze, monumental scale, moody sci-fi'],
+['delt','cinema','del Toro','del Toro style, gothic fantasy, warm amber tones, lush creature design'],
+['noir','cinema','Film noir','American film noir, high contrast black and white, chiaroscuro, 1940s'],
+['tech','cinema','Technicolor','three-strip Technicolor, saturated colors, ruby reds, 1940s Hollywood'],
+['muet','cinema','Cinéma muet','silent film era, high contrast black and white, exaggerated gestures, 1920s'],
+['hong','cinema','Hong Kong 80s','1980s Hong Kong action cinema, neon streets, gun smoke, saturated wet look'],
+['jarm','cinema','Jarmusch','Jim Jarmusch style, deadpan monochrome, static tableaux, minimalist'],
+['tar','shock','Tarantino','Tarantino style, pop reference, bold dialogue scene, saturated colors, tension'],
+['refn','shock','Refn','Winding Refn style, neon-soaked silence, geometric staging, hypnotic'],
+['fin','shock','Fincher','David Fincher style, cold cinematography, muted green palette, uneasy'],
+['aron','shock','Aronofsky','Aronofsky style, visceral intensity, saturated sweat, obsession, dark close-up'],
+['noe','shock','Gaspar Noé','Gaspar Noé style, aggressive saturated colors, hallucinatory lights'],
+['spike','shock','Spike Lee','Spike Lee style, warm saturated palette, political energy, dolly shot'],
+['park','shock','Park Chan-wook','Park Chan-wook style, elegant symmetrical violence, baroque imagery'],
+['blade','shock','Blade Runner','Blade Runner cyberpunk, neon magenta cyan, rain-slick, monumental dystopia'],
+['mad','shock','Mad Max','Mad Max style, desert wasteland, saturated orange and teal, chaos, dust'],
+['matrix','shock','Matrix','The Matrix style, green monochrome, digital rain, leather, bullet time'],
+['jaws','shock','Spielberg 70s','1970s Spielberg style, summery dread, wide anamorphic lenses, warm haze'],
+['byz','peinture','Art byzantin','Byzantine icon, gold leaf, flat perspective, elongated figures, halo, mosaic'],
+['rena','peinture','Renaissance','Italian Renaissance, linear perspective, sfumato, warm earth tones'],
+['baroq','peinture','Baroque','Baroque painting, Caravaggio chiaroscuro, deep shadows, tenebrism'],
+['roman','peinture','Romantisme','Romanticism, dramatic skies, sublime landscape, rich brushwork'],
+['impr','peinture','Impressionnisme','Impressionist, loose brushstrokes, plein air light, vibrant dabs'],
+['vg','peinture','Van Gogh','Van Gogh, swirling brushwork, bold expressive color, thick impasto'],
+['fauv','peinture','Fauvisme','Fauvist, Matisse, pure unmixed colors, wild brushwork, flat decorative'],
+['expr','peinture','Expressionnisme','Expressionist, Munch and Kirchner, distorted forms, anguished atmosphere'],
+['cub','peinture','Cubisme','Analytical Cubism, fragmented forms, multiple viewpoints, muted palette'],
+['sure','peinture','Surréalisme','Surrealist painting, Dali and Magritte, dreamlike, impossible objects'],
+['deco','peinture','Art déco','Art Deco, geometric golden ornaments, streamlined, 1920s glamour'],
+['popa','peinture','Pop art','Pop art, Warhol and Lichtenstein, bold flat colors, Ben-Day dots, commercial'],
+['op','peinture','Op art','Op art, Vasarely, optical illusions, hypnotic visual vibration'],
+['street','peinture','Street art','Street art, Banksy stencil, spray paint texture, urban wall, political'],
+['oil','peinture','Huile classique','classical oil, visible impasto, old master, rich glazing'],
+['aq','peinture','Aquarelle','watercolor, translucent washes, bleeding edges, soft paper texture'],
+['sumi','peinture','Sumi-e','Japanese sumi-e ink, bold brushstrokes, black ink, zen minimalism'],
+['scul','peinture','Sculpture grecque','Classical Greek marble sculpture, draped fabric, idealized anatomy'],
+['mos','peinture','Mosaïque','Byzantine mosaic, gold and colored tesserae, flat hieratic composition'],
+['uki','peinture','Ukiyo-e','Japanese ukiyo-e woodblock, Hokusai, flat colors, bold outlines'],
+['punk','pop','Affiche punk','1970s punk poster, ripped paper collage, ransom typography, black red, DIY'],
+['sov','pop','Affiche soviétique','Soviet propaganda poster, bold red black, heroic pose, constructivist'],
+['p80','pop','Affiche 80s','1980s action movie poster, airbrushed, neon colors, dramatic pose'],
+['retroad','pop','Pub rétro 50s','1950s American advertising illustration, painted commercial art, warm'],
+['rock','pop','Affiche rock','1970s rock poster, psychedelic Fillmore, swirling organic, saturated'],
+['cirq','pop','Affiche cirque','Vintage circus poster, ornate lettering, sepia red, Victorian'],
+['bolly','pop','Bollywood','Bollywood poster, saturated jewel tones, dramatic faces, ornate typography'],
+['dada','pop','Dada collage','Dadaist collage, cut-up photos, absurd juxtapositions, 1920s anti-art'],
+['neo','pop','Néo-noir','Neo-noir poster, dramatic silhouette, deep blues oranges, mysterious'],
+['bla','pop','Blaxploitation','1970s blaxploitation poster, bold graphic, saturated, afro attitude'],
+['anim','pop','Affiche anime','Anime movie poster, dramatic illustration, cinematic composition'],
+['kung','pop','Kung-fu 70s','1970s kung fu movie poster, hand-painted, dynamic martial arts pose'],
+['lc','ill','Ligne claire','Franco-Belgian ligne claire, Herge, uniform ink outlines, flat colors'],
+['gold','ill','Comics Golden Age','Golden Age comic, 1940s superhero, flat primaries, halftone dots'],
+['mod','ill','Comics modernes','Modern comic, Jim Lee anatomy, crosshatch, dramatic poses'],
+['ross','ill','Comics réalistes','Photorealistic comic, Alex Ross painted, cinematic lighting'],
+['vec','ill','Vectoriel','clean vector illustration, flat geometric shapes, crisp edges'],
+['flat','ill','Flat design','Flat design, minimalist blocks, no gradients, geometric'],
+['much','ill','Art nouveau','Art Nouveau poster, Alphonse Mucha, flowing lines, floral, Belle Epoque'],
+['constr','ill','Constructivisme','Russian Constructivist, Rodchenko, bold red black, diagonal photomontage'],
+['psy','ill','Psychédélique','1960s psychedelic, Fillmore style, swirling organic, saturated complementary'],
+['m90','ill','Manga 90s','1990s manga, cel-shaded, dramatic linework, screentone, dynamic'],
+['bd','ill','BD franco-belge','Franco-Belgian bande dessinée, clear line art, detailed backgrounds'],
+['stair','ill','Gravure victorienne','Victorian engraving, fine crosshatched linework, antique book illustration'],
+['shon','manga','Manga shonen','Shonen manga, Akira Toriyama, dynamic action lines, bold ink work'],
+['sein','manga','Manga seinen','Seinen manga, Berserk and Vagabond, detailed realistic, dark, crosshatch'],
+['cybm','manga','Manga cyberpunk','Cyberpunk manga, Ghost in the Shell, dense cityscape, neon, dystopian'],
+['ghib','manga','Ghibli','Studio Ghibli, Miyazaki, hand-painted nature, warm nostalgic watercolor'],
+['trig','manga','Studio Trigger','Studio Trigger, hyper-energetic action, bold saturated, exaggerated poses'],
+['shin','manga','Shinkai','Shinkai anime, breathtaking skies, luminous lens flares, photorealistic backgrounds'],
+['chib','manga','Chibi kawaii','Chibi kawaii, oversized head, tiny body, large sparkling eyes, pastel'],
+['y2k','manga','Shojo 2000s','2000s shojo manga, sparkling eyes, floral screentones, delicate pastel'],
+['sport','action','Sport action','Sports action photography, frozen mid-motion, sweat, dynamic, stadium lighting'],
+['foot','action','Football','Football hero moment, kicking ball with power, stadium lights, crowd blurred'],
+['bask','action','Basketball','Basketball dunk, airborne, dramatic tension, arena lighting, dynamic pose'],
+['taich','action','Tai chi','Tai chi pose in nature, flowing graceful movement, misty mountains, zen'],
+['box','action','Boxe','Boxing champion portrait, sweat, gloves raised, dramatic ringside lighting'],
+['f1','action','Formule 1','F1 racing driver, helmet, jumpsuit, motion blur, dramatic trackside'],
+['surf','action','Surf','Surfer riding giant wave, spray, dramatic barrel, tropical sunset'],
+['sk8','action','Skateboard','Skateboarder aerial trick, urban backdrop, dynamic motion, sunset silhouette'],
+['bmx','action','BMX','BMX rider mid-air, dirt jump, dust cloud, dynamic sports photography'],
+['kara','action','Karaté dojo','Karate master in dojo, white gi, black belt, martial arts stance, shoji screens'],
+['sam','action','Samouraï','Samurai duel, katana clash, sparks, cherry blossoms, feudal Japan'],
+['nin','action','Ninja','Stealth ninja on rooftop, moonlit night, black outfit, shuriken, silhouette'],
+['west','action','Western','Spaghetti western, dusty frontier, harsh sun, poncho, squinting gunslinger'],
+['heist','action','Braquage','Heist movie still, masked figures, dramatic vault lighting, tension'],
+['p3d','num','3D photoréaliste','Photorealistic 3D render, Octane, ray tracing, subsurface scattering, studio'],
+['pix','num','3D Pixar','Pixar-style 3D, stylized characters, subsurface, warm cinematic lighting'],
+['low','num','Low poly','Low poly 3D, faceted geometric, flat shading, indie game aesthetic'],
+['cel','num','Cel shading','Cel-shaded 3D render, anime toon, bold outlines, flat colors'],
+['px8','num','Pixel 8-bit','8-bit pixel art, NES-era, limited palette, chunky pixels, retro sprite'],
+['px16','num','Pixel 16-bit','16-bit pixel art, SNES-era, richer palette, detailed sprite work'],
+['vap','num','Vaporwave','Vaporwave, 80s-90s nostalgia, pastel gradient, statue, palm, VHS glitch'],
+['syn','num','Synthwave','Synthwave, neon magenta cyan, chrome grid, retro-futuristic sun, outrun'],
+['cyb','num','Cyberpunk','Cyberpunk, neon-soaked cityscape, holographic HUD, chromatic aberration'],
+['frac','num','Fractales','Fractal art, Mandelbrot, infinite self-similar, psychedelic zoom'],
+['gig','num','Bio-mécanique','H.R. Giger biomechanical, dark organic-mechanical, monochrome, alien'],
+['holog','num','Hologramme','Holographic iridescent aesthetic, translucent volumetric light, futuristic'],
+['v20','retro','Vintage 20s','1920s vintage, Art Deco glamour, sepia gold, flapper, ornate patterns'],
+['v50','retro','Vintage 50s','1950s vintage, rock and roll, drive-in, chrome pastel, diner, Technicolor'],
+['v60','retro','Vintage 60s','1960s vintage, psychedelic hippie, groovy patterns, warm saturated, mod'],
+['v70','retro','Vintage 70s','1970s vintage, disco, warm orange brown, shag carpet, Kodachrome'],
+['v80','retro','Vintage 80s','1980s vintage, neon Memphis, VHS grain, chrome, big hair'],
+['v90','retro','Vintage 90s','1990s vintage, grunge, muted earth tones, film grain, flannel'],
+['rf50','retro','Rétro-futurisme','1950s retro-futurism, chrome rockets, atomic age, Googie architecture'],
+['steam','retro','Steampunk','Steampunk, brass copper machinery, Victorian engineering, gears, sepia'],
+['solar','retro','Solarpunk','Solarpunk, optimistic eco-futurism, vertical gardens, art nouveau organic tech'],
+['afro','retro','Afrofuturisme','Afrofuturism, African motifs fused with futurism, kente patterns, cosmic'],
+['atom','retro','Atompunk','Atompunk, 1950s-60s atomic age, chrome, retro sci-fi, pastel and chrome'],
+['diesel','retro','Dieselpunk','Dieselpunk, 1930s-50s industrial, diesel machinery, art deco future'],
+['cass','retro','Cassette futurism','Cassette futurism, 80s beige computer aesthetic, CRT monitors, early CGI'],
+['alyr','abs','Abstraction lyrique','Lyrical abstraction, gestural brushwork, expressive color fields'],
+['ageo','abs','Abstraction géo','Geometric abstraction, Mondrian and Kandinsky, pure forms, primaries'],
+['apsy','abs','Art psychédélique','Psychedelic art, hallucinatory patterns, kaleidoscopic symmetry, saturated'],
+['aqua','abs','Art quantique','Quantum art, particle superposition, wave-particle duality, subatomic'],
+['aimm','abs','Art immersif','Immersive installation art, TeamLab, projected light, interactive'],
+['neon','abs','Néon','Neon sign, glowing glass tubes, saturated pink cyan, night, luminescent'],
+['glitch','abs','Glitch art','Glitch art, datamoshing, pixel sorting, corrupted digital aesthetics'],
+['goldh','lum','Golden hour','Golden hour, warm amber sunlight, long shadows, luminous haze, romantic'],
+['blue','lum','Blue hour','Blue hour, cool twilight, deep blue ambient, soft gradient, calm'],
+['sun','lum','Coucher de soleil','Sunset, vivid orange red violet sky, silhouetted foreground, radial burst'],
+['fog','lum','Brouillard','Heavy fog, diffuse soft light, mysterious, muted palette, ethereal'],
+['rain','lum','Pluie battante','Heavy rain, wet reflective surfaces, grey overcast, moody urban lighting'],
+['neonl','lum','Néon urbain','Neon lighting, saturated pink cyan glow, wet reflections, night urban'],
+['cand','lum','Bougie','Candlelight, warm flickering glow, deep shadows, intimate, amber tones'],
+['strobe','lum','Stroboscope','Strobe lighting, frozen motion, harsh white flash, club energy'],
+['red','col','Monochrome rouge','Monochrome red treatment, crimson scarlet burgundy, intense'],
+['green','col','Monochrome vert','Monochrome green, emerald jade forest, organic mysterious'],
+['dt','col','Orange & teal','Orange and teal duotone, blockbuster palette, warm skin cool shadows'],
+['sat','col','Saturé max','Maximum saturation, hyper-vibrant, every hue at peak intensity, poster'],
+['cyan','col','Cyanotype','Cyanotype blueprint, Prussian blue monochrome, white line, vintage'],
+['sep','col','Sépia','Sepia tone, warm brown monochrome, vintage nostalgic, antique'],
+['bw','col','Noir & blanc','Black and white photography, deep blacks, bright highlights, timeless'],
+['past','col','Pastel','Soft pastel palette, powdery tones, dreamy gentle atmosphere'],
+['dbl','eff','Double exposition','Double exposure, two images blended, ghostly overlay, dreamlike'],
+['bok','eff','Bokeh','Shaped bokeh, heart and star light points, out-of-focus, dreamy'],
+['tilt','eff','Tilt-shift','Tilt-shift, miniature faking, selective focus band, toy-town'],
+['grain','eff','Grain argentique','Heavy film grain, textured noise, analog warmth, gritty'],
+['hal','eff','Halation','Halation, red glow around highlights, analog film bloom'],
+['aber','eff','Aberration','Chromatic aberration, color fringing, RGB split, glitch aesthetic'],
+['pol','eff','Polarisant','Polarizing filter, deep saturated sky, no reflections, enhanced contrast'],
+['ir','eff','Infrarouge','Infrared photography, white foliage, dark dramatic sky, false-color'],
+['anam','eff','Anamorphique','Anamorphic lens flare, horizontal blue streak, widescreen cinema'],
+['fisheye','eff','Fisheye','Fisheye lens, extreme barrel distortion, ultra-wide, dynamic']
+];
+
+var WARDROBE=[
+'worn leather jacket covered in patches','elegant tailored velvet suit','technicolor bomber jacket','ornate embroidered kimono',
+'cyberpunk trench coat with LED trim','1960s mod dress with geometric print','renaissance doublet with gold brocade','denim overalls splattered with paint',
+'astronaut suit with mission patches','martial arts gi with black belt','disco sequin shirt open collar','19th century military parade uniform',
+'punk studded vest and ripped jeans','traditional West African boubou with rich patterns','sport tracksuit in bold colors','fisherman knit sweater and oilskin coat',
+'flapper fringe dress with pearl necklace','baroque aristocratic coat with lace cuffs','biker racing leather one-piece','mexican charro suit with silver buttons',
+'orange prison jumpsuit','chef whites with tall toque','samurai armor plates lacquered red','matador traje de luces',
+'1950s soda jerk uniform with paper hat','victorian morning coat and top hat','holographic streetwear from the future','hand-knitted norse wool cloak',
+'inventor outfit with goggles and tools','wet look racing jacket','arctic explorer fur-lined parka','shimmering gold stage costume with feathers'
+];
+var SETTINGS=[
+'inside a neon-lit ramen bar at night','on a windswept cliff overlooking the ocean','in a baroque mirrored palace hall','on a rain-soaked Tokyo crossing',
+'inside a colossal industrial cathedral of machines','in a sunflower field at golden hour','on the surface of the moon, Earth rising','in a smoky 1940s jazz club',
+'amid the ruins of a jungle temple','on a vintage transatlantic ocean liner','in a brutalist concrete plaza under fog','inside a baroque opera house from the balconies',
+'on a dusty western main street at noon','in a hologram-filled server room','at a 1970s roller disco','in a floating garden among the clouds',
+'on a pirate deck during a storm','in an endless library of spiral staircases','at a neon night market in Hong Kong','inside a crystal cave lit by lava',
+'on a rooftop helipad above the city skyline','in a royal throne room of gold and marble','in a post-apocalyptic desert convoy','inside a cozy bookshop in the rain',
+'on a theater stage under a single spotlight','in a meadow of bioluminescent flowers','at a Formula 1 pit lane','inside a retro spaceship cockpit'
+];
+var ANGLES=[
+'dramatic low-angle hero shot','intimate medium close-up','full body wide establishing shot','over-the-shoulder framing',
+'bird-eye view','dutch tilted angle','extreme close-up on the eyes','epic symmetrical center composition',
+'profile silhouette against light','through-a-doorway frame shot'
+];
+var MOODS=['triumphant','mysterious','joyful','contemplative','fierce','serene','rebellious','nostalgic','epic','playful','brooding','electric'];
+
+var DEF_ADM={
+prompts:{
+face:'CRITICAL ABSOLUTE RULE — FACE PRESERVATION: the person in the output MUST be the EXACT SAME PERSON as in the reference image. Identical facial features, identical bone structure, identical eyes, nose, mouth, skin tone. This rule overrides every other instruction. Never beautify, never age, never change the face.',
+expr:'The character faces the camera directly (front view), head clearly visible, with a beautiful friendly gently smiling warm expression.',
+change:'RADICAL VARIATION REQUIRED: change the clothing, headwear, pose, decor, lighting, color palette and era COMPLETELY between generations. Never repeat a previous outfit or setting. Be bold, surprising, cinematic.',
+woman:'SECOND PERSON — a stunning, magnificent woman beside the main character. She has {{DESC}}. Both engaged in a friendly warm positive interaction (handshake, hug, walking, laughing, dancing).',
+man:'SECOND PERSON — a charismatic handsome man beside the main character. He has {{DESC}}. Both engaged in a friendly warm positive interaction (handshake, walking, laughing, celebrating).',
+space:'SETTING IN SPACE: deep space — cosmic nebula background, stars, planets, or inside a futuristic spaceship. Cosmic or astronaut-themed outfit adapted to the art style.',
+text:'TEXT ELEMENT: display the text "{{TEXT}}" in clear legible typography prominently ON THE CHARACTER — printed on the t-shirt, hat or badge. If there is a second person, they also wear the same text.',
+qual:'High detail, professional quality, no watermark, no signature, no border.'
+},
+woman:{
+enabled:true,
+custom:'a stunning woman with a different ethnicity and hair color, elegant and magnificent',
+ethnicities:['Européenne','Africaine','Est-Asiatique','Sud-Asiatique','Moyen-Orientale','Latina','Métisse','Caraïbéenne'],
+hairs:['blond','brun','noir jais','rouge','auburn','platine','châtain','brun foncé']
+},
+man:{
+enabled:true,
+custom:'a charismatic man with a different ethnicity and hairstyle, elegant and confident',
+ethnicities:['Européen','Africain','Est-Asiatique','Sud-Asiatique','Moyen-Oriental','Latino','Métis','Caraïbéen'],
+hairs:['blond','brun','noir','grisonnant temples','chauve élégant','bouclé','dégradé moderne','long attaché']
+},
+texts:{shirt:'VOTEZ LFI',banner:'VOTEZ LFI',hat:'VOTEZ LFI'}
+};
+
+/* ════════════════════════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════════════════════════ */
+var st={
+keys:[],img:null,imgName:null,analysis:null,
+db:[],adm:{},
+running:false,paused:false,stop:false,workersOn:false,
+batch:40,size:'1K',ratioMode:'1:1',comboP:0.6,comp:'0',spaceP:0.1,txtMode:'sometimes',
+wPerKey:2,interval:3000,
+series:[],curSeries:-1,
+allItems:[],usedStyles:{},usedWardrobe:{},usedSetting:{},
+recentTimes:[],domIds:[],maxDom:50,
+persisted:false
+};
+var blk=0;
+var workers=[];
+
+/* ════════════════════════════════════════════════════════════════
+   PERSISTENCE (localStorage pour le léger, IndexedDB pour le lourd)
+════════════════════════════════════════════════════════════════ */
+function loadLS(k,d){try{var r=localStorage.getItem(k);return r?JSON.parse(r):d}catch(e){return d}}
+function saveLS(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function saveAdm(){saveLS(LS.adm,{prompts:st.adm.prompts,woman:st.adm.woman,man:st.adm.man,texts:st.adm.texts})}
+function saveCfg(){saveLS(LS.cfg,{batch:st.batch,size:st.size,ratio:st.ratioMode,comboP:st.comboP,comp:st.comp,spaceP:st.spaceP,txt:st.txtMode,wPerKey:st.wPerKey,interval:st.interval})}
+
+function loadAll(){
+  st.db=loadLS(LS.db,null);
+  if(!Array.isArray(st.db)||st.db.length<BASE.length){
+    st.db=BASE.map(function(a){return{id:a[0],cat:a[1],name:a[2],prompt:a[3]}});
+    saveLS(LS.db,st.db);
+  }
+  var a=loadLS(LS.adm,{});
+  st.adm={
+    prompts:Object.assign({},DEF_ADM.prompts,a.prompts||{}),
+    woman:Object.assign({},DEF_ADM.woman,a.woman||{}),
+    man:Object.assign({},DEF_ADM.man,a.man||{}),
+    texts:Object.assign({},DEF_ADM.texts,a.texts||{})
+  };
+  var c=loadLS(LS.cfg,{});
+  if(c.batch)st.batch=c.batch;
+  if(c.size)st.size=c.size;
+  if(c.ratio)st.ratioMode=c.ratio;
+  if(typeof c.comboP==='number')st.comboP=c.comboP;
+  if(c.comp!==undefined)st.comp=String(c.comp);
+  if(typeof c.spaceP==='number')st.spaceP=c.spaceP;
+  if(c.txt)st.txtMode=c.txt;
+  if(c.wPerKey)st.wPerKey=c.wPerKey;
+  if(c.interval)st.interval=c.interval;
+  var keys=loadLS(LS.keys,[]);
+  st.keys=keys.map(function(k){return{key:k,lastReq:0,cool:0,active:true,errors:0,count:0}});
+  if(st.keys.length)$('keysIn').value=keys.join('\n');
+}
+
+/* Restauration complète au démarrage : séries + images depuis IndexedDB */
+function restoreSession(){
+  return idbGetAll('series').then(function(series){
+    if(!series.length)return;
+    series.sort(function(a,b){return a.id-b.id});
+    var jobs=[];
+    series.forEach(function(sd){
+      var s={id:sd.id,items:[],done:sd.done,title:sd.title};
+      st.series[s.id]=s;
+      (sd.itemIds||[]).forEach(function(iid){jobs.push(iid)});
+    });
+    st.series=st.series.filter(Boolean);
+    if(!st.series.length)return;
+    st.curSeries=st.series.length-1;
+    return idbGetAll('images').then(function(all){
+      var byId={};
+      all.forEach(function(r){byId[r.id]=r});
+      st.series.forEach(function(s){
+        // reconstruire l'ordre via le tri par id
+      });
+      // reconstituer les items : on garde l'ordre numérique des ids
+      var ids=jobs;
+      ids.forEach(function(iid){
+        var rec=byId[iid];
+        if(!rec)return;
+        var s=st.series.find(function(x){return String(x.id)===String(rec.meta.seriesId)});
+        if(!s)return;
+        var it={
+          id:iid,cat:rec.meta.cat,style:rec.meta.style,ratio:rec.meta.ratio,
+          seriesId:rec.meta.seriesId,fname:rec.meta.fname,time:rec.meta.time,
+          badges:rec.meta.badges||[],sub:rec.meta.sub,prompt:rec.meta.prompt,
+          state:'done',saved:true,
+          blob:rec.blob,url:rec.url||(rec.blob?URL.createObjectURL(rec.blob):null)
+        };
+        if(!it.url)return;
+        s.items.push(it);
+        st.allItems.push(it);
+      });
+      renderTabs();
+      renderCurrentSeries();
+      $('empty').style.display=st.allItems.length?'none':'block';
+      log('Session restaurée : '+st.allItems.length+' image(s) dans '+st.series.length+' série(s)','s');
+    });
+  }).catch(function(e){log('Restauration impossible : '+(e.message||e),'w')});
+}
+
+/* ════════════════════════════════════════════════════════════════
+   KEYS
+════════════════════════════════════════════════════════════════ */
+function keysFromInput(){
+  var lines=($('keysIn').value||'').split(/\r?\n/).map(function(l){return l.trim()}).filter(function(l){return l.length});
+  var valid=[],dup=0,seen={};
+  lines.forEach(function(k){
+    if(k.indexOf('sk-')!==0)return;
+    if(seen[k]){dup++;return}
+    seen[k]=1;valid.push(k);
+  });
+  return{keys:valid,dup:dup,invalid:lines.length-valid.length};
+}
+function autoSaveKeys(silent){
+  var r=keysFromInput();
+  var prev={};st.keys.forEach(function(k){prev[k.key]=k});
+  st.keys=r.keys.map(function(k){return prev[k]||{key:k,lastReq:0,cool:0,active:true,errors:0,count:0}});
+  saveLS(LS.keys,r.keys);
+  renderKeys();updateStart();
+  $('saveOk').innerHTML=r.keys.length
+    ?'<span>✓ '+r.keys.length+' clé(s) sauvegardée(s)'+(r.dup?' · '+r.dup+' doublon(s)':'')+(r.invalid?' · '+r.invalid+' invalide(s)':'')+'</span>'
+    :'';
+  if(!silent&&r.keys.length)toast(r.keys.length+' clé(s) enregistrée(s)');
+}
+function renderKeys(){
+  var el=$('keysList'),badge=$('keyBadge'),cap=$('capBox');
+  if(!st.keys.length){el.style.display='none';badge.textContent='0';cap.style.display='none';$('wHint').textContent='';return}
+  el.style.display='';
+  var now=Date.now(),ready=0,html='';
+  st.keys.forEach(function(k,i){
+    var cls='ok',tx='OK';
+    if(!k.active){cls='dead';tx='Morte'}
+    else if(k.cool>now){cls='cool';tx='Cool '+Math.ceil((k.cool-now)/1000)+'s'}
+    else ready++;
+    html+='<div class="kitem"><span style="color:var(--faint);font-family:var(--mono);font-size:11px;width:16px">'+(i+1)+'</span><span class="id">'+esc(k.key.slice(0,8))+'…'+esc(k.key.slice(-4))+'</span><span class="req">'+k.count+'</span><span class="kst '+cls+'">'+tx+'</span></div>';
+  });
+  el.innerHTML=html;
+  badge.textContent=ready+'/'+st.keys.length;
+  var w=st.wPerKey||2;
+  var capMin=Math.round(ready*w*60/Math.max(3,st.interval/1000));
+  cap.style.display='';
+  cap.innerHTML='⚡ '+ready+' clé(s) × '+w+' workers = '+(ready*w)+' générations en parallèle → ~'+capMin+' images/min. Série de '+st.batch+' ≈ '+Math.max(1,Math.round(st.batch/Math.max(1,capMin)))+' min.';
+  $('wHint').textContent='Auto : '+(ready*w)+' générations simultanées.';
+}
+
+/* ════════════════════════════════════════════════════════════════
+   POOL / FETCH
+════════════════════════════════════════════════════════════════ */
+function anyKey(){for(var i=0;i<st.keys.length;i++)if(st.keys[i].active)return true;return false}
+function availKey(iv){
+  var now=Date.now(),av=[];
+  st.keys.forEach(function(k){
+    if(k.active&&k.cool<=now&&(!k.lastReq||now-k.lastReq>=iv))av.push(k);
+  });
+  if(!av.length)return null;
+  av.sort(function(a,b){return(a.count-b.count)||((a.lastReq||0)-(b.lastReq||0))});
+  return av[0];
+}
+function acquire(iv){
+  var t0=Date.now();
+  return new Promise(function(res,rej){
+    (function loop(){
+      if(st.stop)return rej(new Error('Arrêt'));
+      var k=availKey(iv);
+      if(k){k.count++;k.lastReq=Date.now();return res(k)}
+      if(!anyKey())return rej(new Error('Aucune clé active'));
+      if(Date.now()-t0>90000)return rej(new Error('Timeout clés'));
+      setTimeout(loop,250);
+    })();
+  });
+}
+function apiFetch(url,opts,iv,tries){
+  tries=tries||5;iv=iv||st.interval;
+  var lastErr=null,att=0;
+  function next(){
+    if(att>=tries)return Promise.reject(lastErr||new Error('Échec API'));
+    if(st.stop)return Promise.reject(new Error('Arrêt'));
+    var cur=att++;
+    return acquire(iv).then(function(k){
+      var headers=Object.assign({},opts.headers||{},{'Authorization':'Bearer '+k.key});
+      return fetch(url,Object.assign({},opts,{headers:headers})).then(function(r){
+        if(r.ok){k.errors=0;return r}
+        return r.clone().text().then(function(tx){
+          tx=(tx||'').slice(0,300);
+          if(r.status===401||r.status===403){
+            k.errors=(k.errors||0)+1;
+            if(k.errors>=3){k.active=false;renderKeys();log('Clé …'+k.key.slice(-4)+' morte (401/403)','e')}
+            throw{status:r.status,message:'HTTP '+r.status+' — '+tx.slice(0,100)};
+          }
+          if(r.status===400||r.status===404)throw{status:r.status,message:'HTTP '+r.status+' — '+tx.slice(0,100)};
+          if(r.status===429){k.cool=Date.now()+65000;log('429 clé …'+k.key.slice(-4)+' → cool 65s','w');renderKeys();return sleep(500).then(next)}
+          if([500,502,503,504].indexOf(r.status)>=0)return sleep(Math.min(6000,2000+cur*1500)).then(next);
+          return sleep(Math.min(4000,1500+cur*1000)).then(next);
+        });
+      }).catch(function(e){
+        if(e&&e.status)throw e;
+        lastErr=e;return sleep(Math.min(3000,1000+cur*800)).then(next);
+      });
+    });
+  }
+  return next();
+}
+function genImage(prompt,size,ratio,src){
+  var body={model:MODEL_IMG,prompt:String(prompt).slice(0,1900),n:1,size:size,ratio:ratio,extra_body:{response_format:'url'}};
+  if(src)body.image=[src];
+  return apiFetch(API+'/images/generations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)},st.interval,5).then(function(r){return r.json()}).then(function(d){
+    var it=d.data&&d.data[0];
+    if(!it)throw new Error('Pas d\'image');
+    if(it.url)return it.url;
+    if(it.b64_json)return'data:image/png;base64,'+it.b64_json;
+    throw new Error('Format inconnu');
+  });
+}
+function callText(msgs,iv,maxTok){
+  var body={model:MODEL_TX,messages:msgs,temperature:0.9,max_tokens:maxTok||1600,reasoning_effort:'none',chat_template_kwargs:{enable_thinking:false}};
+  return apiFetch(API+'/chat/completions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)},iv||6000,3).then(function(r){return r.json()}).then(function(d){
+    var c=d.choices&&d.choices[0]&&d.choices[0].message;
+    return(c&&c.content)||(c&&c.reasoning_content)||null;
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MOTEUR DE VARIÉTÉ
+════════════════════════════════════════════════════════════════ */
+function pickStyle(){
+  var pool=st.db.filter(function(s){return!st.usedStyles[s.id]});
+  if(!pool.length){st.usedStyles={};pool=st.db.slice();log('Styles réinitialisés','w')}
+  var cc={};
+  st.db.forEach(function(s){if(st.usedStyles[s.id])cc[s.cat]=(cc[s.cat]||0)+1});
+  pool.sort(function(a,b){return((cc[a.cat]||0)-(cc[b.cat]||0))||(Math.random()-.5)});
+  var pick=pool[Math.floor(Math.random()*Math.min(20,pool.length))];
+  st.usedStyles[pick.id]=1;
+  return pick;
+}
+function fresh(arr,used){
+  var pool=arr.filter(function(x){return!used[x]});
+  if(!pool.length){arr.forEach(function(x){used[x]=0});pool=arr.slice()}
+  var p=rnd(pool);used[p]=1;return p;
+}
+function companionDesc(kind){
+  var C=st.adm[kind];
+  if(C.custom&&C.custom.trim())return C.custom.trim();
+  var eth=C.ethnicities[Math.floor(Math.random()*C.ethnicities.length)];
+  var hair=C.hairs[Math.floor(Math.random()*C.hairs.length)];
+  return(kind==='woman'?'a stunning woman':'a charismatic man')+' with '+eth+' features and '+hair+' hair, elegant and magnificent';
+}
+function buildPrompt(styleP,cat,opt){
+  var P=st.adm.prompts;
+  var w=opt.wardrobe||fresh(WARDROBE,st.usedWardrobe);
+  var set=opt.setting||fresh(SETTINGS,st.usedSetting);
+  var parts=[P.face,P.expr,P.change];
+  var who=[];
+  if(opt.companion==='woman'&&st.adm.woman.enabled)who.push(P.woman.replace('{{DESC}}',companionDesc('woman')));
+  if(opt.companion==='man'&&st.adm.man.enabled)who.push(P.man.replace('{{DESC}}',companionDesc('man')));
+  if(opt.companion==='both'){
+    if(st.adm.woman.enabled)who.push(P.woman.replace('{{DESC}}',companionDesc('woman')));
+    if(st.adm.man.enabled)who.push(P.man.replace('{{DESC}}',companionDesc('man')));
+  }
+  if(who.length)parts.push(who.join(' '));
+  if(opt.space)parts.push(P.space);
+  parts.push('WARDROBE: the main character wears '+w+'.');
+  parts.push('LOCATION: '+set+'.');
+  parts.push('CAMERA: '+rnd(ANGLES)+'. MOOD: '+rnd(MOODS)+'.');
+  parts.push('ART STYLE: '+styleP+'.');
+  if(opt.text)parts.push(P.text.replace('{{TEXT}}',st.adm.texts.shirt));
+  parts.push(P.qual);
+  return parts.join(' ');
+}
+function pickRatio(){
+  if(st.ratioMode==='mixed')return rnd(['1:1','1:1','9:16','16:9']);
+  return st.ratioMode;
+}
+function aiFusions(n){
+  if(!anyKey())return Promise.resolve(0);
+  return callText([
+    {role:'system',content:'You are a visionary art director. Return ONLY valid JSON, no markdown.'},
+    {role:'user',content:'Create '+n+' SURPRISING visual style fusions for character portraits. Each combines 2-3 aesthetics never mixed before. Max creativity. Return JSON: {"fusions":["A × B × C", ...]} exactly '+n+' items, each under 90 chars.'}
+  ],6000,700).then(function(c){
+    var j=parseJson(c),n2=0;
+    if(j&&Array.isArray(j.fusions)){
+      j.fusions.forEach(function(fu,i){
+        if(typeof fu!=='string'||!fu)return;
+        st.db.push({id:'ai-f'+Date.now()+'-'+i,cat:rnd(['shock','abs','pop','retro']),name:fu.slice(0,90),prompt:'FUSION ART STYLE: '+fu+'. Blend these aesthetics into one coherent striking image.',ai:true});
+        n2++;
+      });
+      if(n2){saveLS(LS.db,st.db);log('IA: '+n2+' fusions inédites ajoutées','s')}
+    }
+    return n2;
+  }).catch(function(){return 0});
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SÉRIES — structure persistée dans IndexedDB
+════════════════════════════════════════════════════════════════ */
+function persistSeries(s){
+  return idbPut('series',{id:s.id,done:s.done,itemIds:s.items.map(function(x){return x.id})});
+}
+function newSeries(){
+  var id=0;
+  st.series.forEach(function(s){if(s.id>=id)id=s.id+1});
+  var s={id:id,items:[],done:false};
+  st.series.push(s);
+  st.curSeries=st.series.length-1;
+  persistSeries(s);
+  renderTabs();
+  $('empty').style.display='none';
+  $('seriesBar').style.display='';
+  return s;
+}
+function renderTabs(){
+  var b=$('seriesBar');
+  b.innerHTML=st.series.map(function(s,i){
+    return'<button class="stab'+(i===st.curSeries?' on':'')+'" data-i="'+i+'">Série '+(i+1)+'<span class="n">'+s.items.length+'</span></button>';
+  }).join('');
+  b.querySelectorAll('.stab').forEach(function(t){
+    t.onclick=function(){st.curSeries=parseInt(t.dataset.i);renderTabs();renderCurrentSeries()};
+  });
+  b.scrollLeft=b.scrollWidth;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   BLOCS — image pleine largeur, options DANS le bloc
+════════════════════════════════════════════════════════════════ */
+function itemById(id){for(var i=0;i<st.allItems.length;i++)if(st.allItems[i].id===id)return st.allItems[i];return null}
+function stylePromptOf(name){
+  for(var i=0;i<st.db.length;i++)if(st.db[i].name===name)return st.db[i].prompt;
+  return name;
+}
+function makeBlock(item){
+  var ci=CATS[item.cat]||{n:item.cat,i:'✨'};
+  var b=document.createElement('div');
+  b.className='blk';b.dataset.id=item.id;
+  var badges=(item.badges||[]).map(function(x){return'<i>'+esc(x)+'</i>'}).join('');
+  b.innerHTML=
+  '<div class="bhead">'+
+    '<span class="bcat">'+ci.i+' '+esc(ci.n)+'</span>'+
+    '<span class="bname">'+esc(item.style)+'</span>'+
+    '<span class="bbadges">'+badges+'</span>'+
+    '<span class="btime">'+esc(item.time||nowT())+'</span>'+
+  '</div>'+
+  '<div class="bimg" id="bi-'+item.id+'"><div class="load"></div></div>'+
+  '<div class="bacts" id="ba-'+item.id+'"></div>'+
+  '<div class="bmore" id="bm-'+item.id+'" style="display:none"></div>'+
+  '<div class="bmsg" id="bmsg-'+item.id+'"></div>';
+  return b;
+}
+function renderActions(item){
+  var el=$('ba-'+item.id);if(!el)return;
+  if(item.state!=='done'){
+    el.innerHTML='';
+    return;
+  }
+  el.innerHTML=
+  '<button class="bact gold" data-a="dl"><span class="i">📥</span>Télécharger</button>'+
+  '<button class="bact" data-a="share"><span class="i">📤</span>Partager</button>'+
+  '<button class="bact" data-a="var"><span class="i">🎨</span>Variantes</button>'+
+  '<button class="bact" data-a="woman"><span class="i">👩</span>+ Femme</button>'+
+  '<button class="bact" data-a="man"><span class="i">👨</span>+ Homme</button>'+
+  '<button class="bact" data-a="solo"><span class="i">🚶</span>Solo</button>'+
+  '<button class="bact" data-a="decor"><span class="i">🏛️</span>Décor seul</button>'+
+  '<button class="bact" data-a="cine"><span class="i">🎬</span>Cinéma</button>'+
+  '<button class="bact" data-a="prompt"><span class="i">✏️</span>Prompt libre</button>';
+  el.querySelectorAll('.bact').forEach(function(btn){
+    btn.onclick=function(){
+      var a=btn.dataset.a;
+      if(a==='dl')dlImage(item);
+      else if(a==='share')shareImage(item);
+      else if(a==='var')runVariants(item);
+      else if(a==='woman')runCompanion(item,'woman');
+      else if(a==='man')runCompanion(item,'man');
+      else if(a==='solo')runSolo(item);
+      else if(a==='decor')runDecor(item);
+      else if(a==='cine')runCineInline(item);
+      else if(a==='prompt')togglePromptZone(item);
+    };
+  });
+}
+function fillBlockImage(item){
+  var wrap=$('bi-'+item.id);if(!wrap)return;
+  var img=document.createElement('img');
+  img.src=item.url;img.alt=item.style;
+  wrap.innerHTML='';wrap.appendChild(img);
+}
+function fillBlockError(item){
+  var wrap=$('bi-'+item.id);if(!wrap)return;
+  wrap.innerHTML='<div class="errmsg">✕ '+esc((item.err||'Erreur').slice(0,140))+'</div>';
+}
+function appendBlock(item){
+  $('empty').style.display='none';
+  var s=st.series[st.curSeries];
+  var b=makeBlock(item);
+  $('stream').appendChild(b);
+  st.domIds.push(item.id);
+  while(st.domIds.length>st.maxDom){
+    var old=st.domIds.shift();
+    var el=document.querySelector('.blk[data-id="'+old+'"]');
+    if(el)el.remove();
+  }
+  renderActions(item);
+  return b;
+}
+function renderCurrentSeries(){
+  var s=st.series[st.curSeries];if(!s)return;
+  $('stream').innerHTML='';
+  st.domIds=[];
+  $('empty').style.display='block';
+  s.items.forEach(function(it){
+    if(it.state==='done'){
+      $('empty').style.display='none';
+      var b=appendBlock(it);
+      fillBlockImage(it);
+    }else if(it.state==='error'){
+      $('empty').style.display='none';
+      appendBlock(it);
+      fillBlockError(it);
+    }else{
+      $('empty').style.display='none';
+      appendBlock(it);
+    }
+  });
+  $('batchDone').style.display=(s.done&&s.items.length)?'block':'none';
+  if(s.done){
+    var ok=s.items.filter(function(x){return x.state==='done'}).length;
+    $('batchDoneSub').textContent=ok+' images dans cette série — toutes sauvegardées dans le navigateur.';
+  }
+}
+function msg(item,m,err){
+  var el=$('bmsg-'+item.id);if(!el)return;
+  el.textContent=m;el.className='bmsg on '+(err?'err':'ok');
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TÉLÉCHARGEMENT — sans target _blank, la page ne bouge jamais
+════════════════════════════════════════════════════════════════ */
+function dlImage(item){
+  var save=function(blob){
+    var u=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=u;a.download=item.fname||('forge_'+stamp()+'.jpg');
+    a.rel='noopener';
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(u)},8000);
+    toast('Téléchargé : '+(item.fname||'image'));
+  };
+  if(item.blob){save(item.blob);return}
+  fetch(item.url,{mode:'cors'}).then(function(r){return r.blob()}).then(function(b){
+    item.blob=b;save(b);
+  }).catch(function(){
+    // dernier recours : si le téléchargement direct est bloqué par CORS,
+    // on ouvre dans un onglet mais SANS quitter la page
+    var a=document.createElement('a');
+    a.href=item.url;a.download=item.fname||'image.jpg';
+    document.body.appendChild(a);a.click();a.remove();
+    toast('Téléchargement lancé');
+  });
+}
+function shareImage(item){
+  if(!navigator.share){
+    if(navigator.clipboard)navigator.clipboard.writeText(item.url).then(function(){toast('URL copiée')});
+    else toast('Partage non supporté','warn');
+    return;
+  }
+  var doShare=function(){return navigator.share({title:item.style,url:item.url}).catch(function(){})};
+  if(item.blob&&navigator.canShare){
+    try{
+      var f=new File([item.blob],item.fname||'image.jpg',{type:item.blob.type});
+      if(navigator.canShare({files:[f]}))return navigator.share({files:[f],title:item.style}).catch(function(){});
+    }catch(e){}
+  }
+  doShare();
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ACTIONS RÉALISATEUR — inline sous l'image
+════════════════════════════════════════════════════════════════ */
+function togglePromptZone(item){
+  var z=$('bm-'+item.id);
+  if(z.style.display==='none'){
+    z.innerHTML='<textarea id="ta-'+item.id+'" placeholder="Ex: en armure de samouraï dans un dojo sous la pluie, éclairage à la bougie…"></textarea><button class="btn pri" id="go-'+item.id+'">Forcer cette modification</button>';
+    z.style.display='block';
+    $('go-'+item.id).onclick=function(){
+      var p=$('ta-'+item.id).value.trim();
+      if(!p)return toast('Écris un prompt','warn');
+      runCustom(item,p);
+      z.style.display='none';
+    };
+  }else z.style.display='none';
+}
+function queueSub(it,label,badges,prompt,useSrc){
+  var s=st.series[st.curSeries];
+  var item={id:'it'+(++blk),cat:it.cat,style:label,ratio:it.ratio,seriesId:s.id,prompt:prompt,useSrc:useSrc,badges:badges,state:'loading',url:null,sub:true,time:nowT()};
+  s.items.push(item);st.allItems.push(item);
+  appendBlock(item);
+  persistSeries(s);
+  queue.push(function(){return genOne(item)});
+  ensureWorkers();
+  msg(it,'«'+label+'» en file — apparaîtra en bas');
+  updateBar();
+}
+function runVariants(it){
+  var P=st.adm.prompts,sp=stylePromptOf(it.style);
+  var s=st.series[st.curSeries];
+  for(var i=0;i<3;i++){
+    (function(n){
+      var pr=[P.face,'Regenerate the SAME person, SAME art style ('+sp+') but TOTALLY DIFFERENT pose, clothing, decor, lighting, era. Variation '+n+'.',P.expr,P.change,'CAMERA: '+rnd(ANGLES),'MOOD: '+rnd(MOODS)+'.',P.qual].join(' ');
+      var item={id:'it'+(++blk),cat:it.cat,style:it.style+' · var '+n,ratio:it.ratio,seriesId:s.id,prompt:pr,useSrc:true,badges:['VAR'],state:'loading',url:null,sub:true,time:nowT()};
+      s.items.push(item);st.allItems.push(item);
+      appendBlock(item);
+      queue.push(function(){return genOne(item)});
+    })(i+1);
+  }
+  persistSeries(s);ensureWorkers();msg(it,'3 variantes en file');updateBar();
+}
+function runCompanion(it,who){
+  var P=st.adm.prompts;
+  var C=st.adm[who];
+  if(!C||!C.enabled){msg(it,'Casting '+(who==='woman'?'femme':'homme')+' désactivé dans l\'Admin',true);return}
+  var tpl=who==='woman'?P.woman:P.man;
+  var pr=[P.face,tpl.replace('{{DESC}}',companionDesc(who)),'Keep the same art style: '+stylePromptOf(it.style)+'.',P.expr,P.qual].join(' ');
+  queueSub(it,'Avec '+(who==='woman'?'une femme':'un homme'),[who==='woman'?'♀':'♂'],pr,true);
+}
+function runSolo(it){
+  var P=st.adm.prompts;
+  var pr=[P.face,'Same person, SOLO portrait (remove any second person), same art style: '+stylePromptOf(it.style)+', new pose and decor.',P.expr,P.qual].join(' ');
+  queueSub(it,'Solo',['SOLO'],pr,true);
+}
+function runDecor(it){
+  var P=st.adm.prompts;
+  var pr=['Create a rich DECOR / ENVIRONMENT in the style: '+stylePromptOf(it.style)+'. NO character at all — only architecture, nature, objects, atmosphere, cinematic scale.','Include the text "'+st.adm.texts.banner+'" on a banner, poster or wall.','Wide cinematic composition.',P.qual].join(' ');
+  queueSub(it,'Décor sans personnage',['DECOR'],pr,false);
+}
+function runCustom(it,p){
+  var P=st.adm.prompts;
+  var pr=[P.face,'Then apply this direction: '+p+'.','Art style: '+stylePromptOf(it.style)+'.',P.expr,P.qual].join(' ');
+  queueSub(it,'Perso · '+p.slice(0,30),['PERSO'],pr,true);
+}
+/* CINÉMA : 15 propositions affichées DANS le bloc, sous l'image */
+function runCineInline(it){
+  var z=$('bm-'+it.id);
+  z.innerHTML='<p style="font-size:12.5px;color:var(--mut);line-height:1.5;margin-bottom:10px">L\'IA propose des concepts de plans pour cette image. Coche ceux qui te plaisent, puis génère. Chaque plan garde ton visage.</p>'+
+  '<div id="pl-'+it.id+'"><p style="font-size:12px;color:var(--faint)">Écriture des 15 propositions…</p></div>'+
+  '<button class="btn gold" id="gc-'+it.id+'" style="margin-top:6px" disabled>🎬 Générer les plans sélectionnés</button>';
+  z.style.display='block';
+  var sp=stylePromptOf(it.style);
+  callText([
+    {role:'system',content:'You are a film director and creative genius. Return ONLY valid JSON, no markdown, single-line strings.'},
+    {role:'user',content:'For a portrait photo of a person, art style "'+it.style+'" ('+sp+'), propose 15 DISTINCT cinematic SHOT CONCEPTS. Each radically different: genre, era, location, action, mood. Return JSON: {"pitches":[{"t":"max 6 words","p":"ONE English image prompt 40-80 words describing scene, framing, lighting, action, featuring the SAME PERSON from reference"}]} exactly 15 items.'}
+  ],8000,2400).then(function(c){
+    var j=parseJson(c);
+    if(!j||!Array.isArray(j.pitches)||!j.pitches.length)throw new Error('JSON invalide');
+    var list=$('pl-'+it.id);list.innerHTML='';
+    var sel={};
+    j.pitches.forEach(function(p,i){
+      if(!p||!p.t||!p.p)return;
+      var el=document.createElement('div');el.className='pitch';el.dataset.i=i;
+      el.innerHTML='<div class="pt"><span>'+esc(p.t)+'</span><span class="mk">○</span></div><div class="pd">'+esc(p.p.slice(0,200))+'</div>';
+      el.onclick=function(){
+        sel[i]=!sel[i];
+        el.classList.toggle('on',!!sel[i]);
+        el.querySelector('.mk').textContent=sel[i]?'●':'○';
+        var n=Object.keys(sel).filter(function(k){return sel[k]}).length;
+        $('gc-'+it.id).disabled=!n;
+        $('gc-'+it.id).textContent='🎬 Générer '+n+' plan'+(n>1?'s':'');
+      };
+      list.appendChild(el);
+    });
+    msg(it,j.pitches.length+' propositions prêtes — coche et génère');
+    $('gc-'+it.id).onclick=function(){
+      var P=st.adm.prompts,n=0;
+      Object.keys(sel).forEach(function(i){
+        if(!sel[i])return;n++;
+        var pr=['CINEMATIC FILM STILL: '+j.pitches[i].p+'.','ART STYLE: '+sp+'.',P.face,P.expr,P.qual].join(' ');
+        queueSub(it,'🎬 '+j.pitches[i].t,['CINÉ'],pr,true);
+      });
+      z.style.display='none';
+    };
+  }).catch(function(e){
+    msg(it,'Erreur cinéma : '+(e.message||e),true);
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════
+   WORKERS / QUEUE / GÉNÉRATION
+════════════════════════════════════════════════════════════════ */
+var queue=[];
+function ensureWorkers(){
+  if(st.workersOn)return;
+  st.workersOn=true;
+  var n=Math.min(16,Math.max(2,st.keys.filter(function(k){return k.active}).length*(st.wPerKey||2)));
+  for(var i=0;i<n;i++)workers.push(worker());
+  log(n+' workers lancés','s');
+}
+async function worker(){
+  while(!st.stop){
+    if(st.paused||!queue.length){await sleep(300);continue}
+    var job=queue.shift();
+    try{await job()}
+    catch(e){if(e&&e.message==='Arrêt')return;log('Worker : '+(e.message||e),'e');await sleep(800)}
+  }
+}
+function updateBar(){
+  var done=st.allItems.filter(function(x){return x.state==='done'}).length;
+  $('bCount').textContent=done;
+  var s=st.series[st.curSeries];
+  if(s&&s.items.length&&st.running){
+    var d=s.items.filter(function(x){return x.state!=='loading'}).length;
+    $('bProg').style.width=Math.round(100*d/s.items.length)+'%';
+  }else $('bProg').style.width=s&&s.done?'100%':'0';
+  $('playBtn').style.display=st.running?'none':'';
+  $('pauseBtn').style.display=st.running?'':'none';
+  $('pauseBtn').textContent=st.paused?'▶':'⏸';
+  var chip=$('chip');
+  if(st.running&&!st.paused){chip.className='statchip run';$('chipTx').textContent='En cours'}
+  else if(st.running){chip.className='statchip';$('chipTx').textContent='Pause'}
+  else{chip.className='statchip';$('chipTx').textContent='Prêt'}
+  if(st.running&&st.recentTimes.length>2){
+    var arr=st.recentTimes.slice(-8),d=[];
+    for(var i=1;i<arr.length;i++)d.push(arr[i]-arr[i-1]);
+    var avg=d.reduce(function(a,b){return a+b},0)/d.length;
+    var par=Math.max(1,st.keys.filter(function(k){return k.active}).length*(st.wPerKey||2));
+    if(s){
+      var rem=s.items.filter(function(x){return x.state==='loading'}).length;
+      $('bEta').textContent=rem?('~'+Math.max(1,Math.round(avg*rem/1000/par))+'s restants'):'';
+    }
+  }else $('bEta').textContent='';
+}
+function setStatus(t){$('bStat').textContent=t}
+
+async function genOne(item){
+  // si le bloc n'est pas au DOM (série non affichée), on met juste à jour les données
+  var inDom=!!document.querySelector('.blk[data-id="'+item.id+'"]');
+  try{
+    var url=await genImage(item.prompt,st.size,item.ratio,item.useSrc?st.img:null);
+    item.url=url;item.state='done';item.time=nowT();
+    item.fname='forge_'+stamp()+'_'+safe(item.cat)+'_'+safe(item.style)+'_'+String(st.allItems.length).padStart(4,'0')+'.jpg';
+    st.recentTimes.push(Date.now());
+    saveImage(item).then(function(){
+      var s=seriesOf(item);if(s)persistSeries(s);
+    });
+    log('✓ '+item.style.slice(0,48),'s');
+    if(inDom){fillBlockImage(item);renderActions(item)}
+  }catch(e){
+    if(e&&e.message==='Arrêt')return;
+    item.state='error';item.err=e.message||'Erreur';
+    log('✕ '+item.style.slice(0,40)+' : '+item.err,'e');
+    if(inDom){
+      var b=document.querySelector('.blk[data-id="'+item.id+'"]');
+      if(b)b.classList.add('err');
+      fillBlockError(item);
+    }
+  }
+  renderTabs();updateBar();
+}
+function seriesOf(item){
+  return st.series.find(function(s){return s.id===item.seriesId});
+}
+function makeJob(){
+  return function(){
+    var isCombo=Math.random()<st.comboP;
+    var companion=null;
+    if(st.comp==='woman'||st.comp==='man')companion=st.comp;
+    else if(st.comp==='both')companion=Math.random()<.5?'woman':'man';
+    var space=st.spaceP>0&&Math.random()<st.spaceP;
+    var textOn=st.txtMode==='yes'||(st.txtMode==='sometimes'&&Math.random()<0.5);
+    var styleName,cat,styleP;
+    if(isCombo){
+      var c1=pickStyle(),c2=pickStyle();
+      cat=c1.cat;styleName=c1.name+' × '+c2.name;
+      styleP='FUSION ART STYLE: '+c1.name+' ('+c1.prompt+') blended with '+c2.name+' ('+c2.prompt+'). Merge into one coherent, striking, never-seen-before visual language.';
+    }else{
+      var sy=pickStyle();cat=sy.cat;styleP=sy.prompt;styleName=sy.name;
+    }
+    var badges=[];
+    if(isCombo)badges.push('FUS');
+    if(companion==='woman')badges.push('♀');else if(companion==='man')badges.push('♂');
+    if(space)badges.push('🚀');
+    var prompt=buildPrompt(styleP,cat,{companion:companion,space:space,text:textOn});
+    var s=st.series[st.curSeries];
+    var item={id:'it'+(++blk),cat:cat,style:styleName,ratio:pickRatio(),seriesId:s.id,prompt:prompt,useSrc:true,badges:badges,state:'loading',url:null,time:nowT()};
+    s.items.push(item);st.allItems.push(item);
+    appendBlock(item);
+    persistSeries(s);
+    setStatus(styleName.slice(0,42));
+    return genOne(item);
+  };
+}
+function launchSeries(){
+  if(!st.img)return toast('Ajoute ta photo','err');
+  if(!anyKey())return toast('Ajoute au moins une clé','err');
+  $('batchDone').style.display='none';
+  newSeries();
+  $('stream').innerHTML='';st.domIds=[];
+  st.running=true;st.paused=false;st.stop=false;
+  updateBar();updateStart();
+  setStatus('Préparation des concepts…');
+  log('▶ Nouvelle série de '+st.batch+' images','s');
+  var prep=st.analysis?Promise.resolve(0):analyzePhoto();
+  prep.then(function(){
+    return st.comboP>=0.3?aiFusions(6):0;
+  }).then(function(){
+    for(var i=0;i<st.batch;i++)queue.push(makeJob());
+    ensureWorkers();
+    setStatus('Génération…');
+  }).catch(function(e){
+    log('Erreur préparation : '+(e.message||e),'e');
+    st.running=false;updateBar();
+  });
+}
+async function analyzePhoto(){
+  log('Analyse vision de la photo…');
+  try{
+    var c=await callText([
+      {role:'system',content:'Describe the main person of this image in 40-60 English words: apparent age range, hair, distinctive features, vibe. NO markdown, single line.'},
+      {role:'user',content:[{type:'text',text:'Describe the main person.'},{type:'image_url',image_url:{url:st.img}}]}
+    ],6000,200);
+    if(c){st.analysis=c.trim();log('Analyse OK','s')}
+  }catch(e){log('Vision échouée : '+e.message,'w')}
+}
+function finishSeries(){
+  st.running=false;st.paused=false;
+  var s=st.series[st.curSeries];
+  if(s&&!s.done){
+    s.done=true;persistSeries(s);
+    var ok=s.items.filter(function(x){return x.state==='done'}).length;
+    $('batchDoneSub').textContent=ok+' images — toutes sauvegardées dans le navigateur. La série suivante sera totalement différente.';
+    $('batchDone').style.display='block';
+  }
+  renderTabs();updateBar();updateStart();
+  setStatus('Série terminée · continue quand tu veux');
+}
+setInterval(function(){
+  if(!st.running)return;
+  if(queue.length===0){
+    var s=st.series[st.curSeries];
+    if(s&&s.items.length&&s.items.every(function(x){return x.state!=='loading'})&&!s.done)finishSeries();
+  }
+  updateBar();
+},800);
+
+/* ════════════════════════════════════════════════════════════════
+   PHOTO — persistée aussi
+════════════════════════════════════════════════════════════════ */
+function fileToUri(f){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(e){res(e.target.result)};r.onerror=rej;r.readAsDataURL(f)})}
+function compress(uri,max){
+  return new Promise(function(res){
+    var im=new Image();
+    im.onload=function(){
+      var s=Math.min(1,max/Math.max(im.width,im.height));
+      var c=document.createElement('canvas');
+      c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      res(c.toDataURL('image/jpeg',0.88));
+    };
+    im.onerror=function(){res(uri)};
+    im.src=uri;
+  });
+}
+function dataUriToBlob(uri){
+  try{
+    var parts=uri.split(','),mime=(parts[0].match(/:(.*?);/)||[])[1]||'image/jpeg';
+    var bin=atob(parts[1]);var arr=new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+    return new Blob([arr],{type:mime});
+  }catch(e){return null}
+}
+async function handleFile(f){
+  if(!f)return;
+  if(f.type.indexOf('image/')!==0)return toast('Fichier non image','err');
+  if(f.size>15*1024*1024)return toast('Image trop lourde (max 15 Mo)','err');
+  try{
+    var raw=await fileToUri(f);
+    st.img=await compress(raw,1280);
+    st.imgName=f.name;st.analysis=null;
+    renderDrop();updateStart();
+    idbPut('kv',st.img,'photo');
+    toast('Photo chargée ✓');
+    log('Photo : '+f.name,'s');
+  }catch(e){toast('Erreur de lecture','err');log('Erreur photo : '+(e.message||e),'e')}
+}
+function renderDrop(){
+  var d=$('drop');
+  if(st.img){
+    d.classList.add('has');
+    d.innerHTML='<div class="prev"><img src="'+st.img+'" alt=""><button class="rm" id="dpRm">✕</button></div>';
+    $('dpRm').onclick=function(e){e.stopPropagation();st.img=null;st.imgName=null;st.analysis=null;idbDel('kv','photo');renderDrop();updateStart();toast('Photo retirée','warn')};
+    $('phBadge').textContent='OK';
+  }else{
+    d.classList.remove('has');
+    d.innerHTML='<input type="file" accept="image/*" id="fileIn">'+
+      '<div class="ic">📷</div><div class="ti">Choisir ma photo</div>'+
+      '<div class="de">Visage bien visible, face caméra.<br>Le visage sera préservé sur 100 % des images.</div>';
+    $('fileIn').addEventListener('change',function(e){
+      if(e.target.files&&e.target.files[0]){handleFile(e.target.files[0]);e.target.value=''}
+    });
+    $('phBadge').textContent='—';
+  }
+}
+function updateStart(){
+  $('startBtn').disabled=!st.img||!anyKey()||st.running;
+  $('playBtn').disabled=!st.img||!anyKey()||st.running;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   JSON PARSER robuste
+════════════════════════════════════════════════════════════════ */
+function parseJson(text){
+  if(!text)return null;
+  var c=String(text).trim();
+  var fm=c.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if(fm)c=fm[1].trim();
+  var fb=c.indexOf('{');if(fb<0)return null;
+  c=c.slice(fb);
+  var lb=c.lastIndexOf('}');if(lb>0)c=c.slice(0,lb+1);
+  var out='',inS=false,escF=false;
+  for(var i=0;i<c.length;i++){
+    var ch=c[i];
+    if(escF){out+=ch;escF=false;continue}
+    if(ch==='\\'){out+=ch;escF=true;continue}
+    if(ch==='"'){inS=!inS;out+=ch;continue}
+    if(inS){
+      if(ch==='\n'){out+='\\n';continue}
+      if(ch==='\r'){out+='\\r';continue}
+      if(ch==='\t'){out+='\\t';continue}
+      var code=ch.charCodeAt(0);
+      if(code<32){out+='\\u'+code.toString(16).padStart(4,'0');continue}
+    }
+    out+=ch;
+  }
+  if(escF)out+='\\';if(inS)out+='"';
+  out=out.replace(/,\s*([}\]])/g,'$1');
+  try{return JSON.parse(out)}catch(e){
+    var ob=0,ok=0,inS2=false,esc2=false;
+    for(var i2=0;i2<out.length;i2++){
+      var ch2=out[i2];
+      if(esc2){esc2=false;continue}
+      if(ch2==='\\'){esc2=true;continue}
+      if(ch2==='"'){inS2=!inS2;continue}
+      if(inS2)continue;
+      if(ch2==='{')ob++;else if(ch2==='}')ob--;else if(ch2==='[')ok++;else if(ch2===']')ok--;
+    }
+    var r=out;if(inS2)r+='"';
+    while(ok>0){r+=']';ok--}while(ob>0){r+='}';ob--}
+    try{return JSON.parse(r)}catch(e2){return null}
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   HISTORIQUE
+════════════════════════════════════════════════════════════════ */
+function openHist(){
+  var g=$('hGrid');
+  var items=st.allItems.filter(function(x){return x.state==='done'});
+  g.innerHTML=items.length?items.map(function(it){
+    var ci=CATS[it.cat]||{i:'✨'};
+    return'<div class="hcell" data-id="'+it.id+'"><img loading="lazy" src="'+it.url+'" alt=""><div class="l">'+ci.i+' '+esc(it.style.slice(0,26))+'</div></div>';
+  }).join(''):'<p style="grid-column:1/-1;text-align:center;color:var(--faint);padding:40px">Aucune image encore</p>';
+  g.querySelectorAll('.hcell').forEach(function(el){
+    el.onclick=function(){
+      $('histM').classList.remove('on');
+      var it=itemById(el.dataset.id);
+      if(!it)return;
+      var s=seriesOf(it);
+      if(s){st.curSeries=st.series.indexOf(s);renderTabs();renderCurrentSeries()}
+    };
+  });
+  $('histCnt').textContent=items.length;
+  $('histM').classList.add('on');
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ADMIN — prompts / femme / homme / textes / base / données
+════════════════════════════════════════════════════════════════ */
+var admTab='prompts';
+function openAdm(){$('admM').classList.add('on');renderAdm()}
+function taField(l,k,P){
+  return'<div class="f"><label>'+l+'</label><textarea data-k="'+k+'" style="min-height:64px">'+esc(P[k])+'</textarea></div>';
+}
+function renderChips(id,arr){
+  var c=$(id);if(!c)return;
+  c.innerHTML=arr.map(function(v){return'<span class="chip on" data-v="'+esc(v)+'">'+esc(v)+' <span class="x">✕</span></span>'}).join('');
+  c.querySelectorAll('.chip').forEach(function(ch){
+    ch.onclick=function(){
+      var i=arr.indexOf(ch.dataset.v);
+      if(i>=0)arr.splice(i,1);
+      renderChips(id,arr);
+    };
+  });
+}
+function renderAdm(){
+  var c=$('admBody');
+  if(admTab==='prompts'){
+    var P=st.adm.prompts;
+    c.innerHTML='<p class="hint" style="margin-bottom:12px">Règles envoyées à chaque génération. <code style="font-family:var(--mono);color:var(--gold)">{{DESC}}</code> et <code style="font-family:var(--mono);color:var(--gold)">{{TEXT}}</code> sont remplacées automatiquement.</p>'+
+    taField('Préservation du visage (critique)','face',P)+
+    taField('Expression / regard caméra','expr',P)+
+    taField('Variation obligatoire','change',P)+
+    taField('Ajout d\'une femme ({{DESC}} auto)','woman',P)+
+    taField('Ajout d\'un homme ({{DESC}} auto)','man',P)+
+    taField('Saut dans l\'espace','space',P)+
+    taField('Texte sur vêtement ({{TEXT}} auto)','text',P)+
+    taField('Qualité finale','qual',P)+
+    '<button class="btn pri" id="saveP">💾 Sauvegarder les prompts</button>';
+    c.querySelectorAll('textarea[data-k]').forEach(function(t){t.oninput=function(){P[t.dataset.k]=t.value}});
+    $('saveP').onclick=function(){saveAdm();toast('Prompts sauvegardés')};
+  }
+  else if(admTab==='woman'){
+    var W=st.adm.woman;
+    c.innerHTML='<div class="arow"><label>Activer le personnage femme</label><input type="checkbox" id="wOn"'+(W.enabled?' checked':'')+'></div>'+
+    '<div class="f"><label>Description personnalisée (si remplie, remplace le tirage aléatoire)</label><textarea id="wC" style="min-height:60px">'+esc(W.custom)+'</textarea><div class="hint">Ex : une femme rousse aux yeux verts en robe rouge, souriante et élégante.</div></div>'+
+    '<div class="f"><label>🌍 Ethnies (clique pour supprimer)</label><div class="chips" id="wEth"></div><div class="chipadd"><input type="text" id="wEthNew" placeholder="Ajouter une ethnie"><button id="wEthAdd">+ Ajouter</button></div></div>'+
+    '<div class="f"><label>💇 Cheveux (clique pour supprimer)</label><div class="chips" id="wHair"></div><div class="chipadd"><input type="text" id="wHairNew" placeholder="Ajouter une couleur"><button id="wHairAdd">+ Ajouter</button></div></div>'+
+    '<button class="btn pri" id="saveW">💾 Sauvegarder le casting femme</button>';
+    renderChips('wEth',W.ethnicities);renderChips('wHair',W.hairs);
+    $('wOn').onchange=function(e){W.enabled=e.target.checked};
+    $('wC').oninput=function(e){W.custom=e.target.value};
+    $('wEthAdd').onclick=function(){var v=$('wEthNew').value.trim();if(v&&W.ethnicities.indexOf(v)<0){W.ethnicities.push(v);renderChips('wEth',W.ethnicities);$('wEthNew').value=''}};
+    $('wHairAdd').onclick=function(){var v=$('wHairNew').value.trim();if(v&&W.hairs.indexOf(v)<0){W.hairs.push(v);renderChips('wHair',W.hairs);$('wHairNew').value=''}};
+    $('saveW').onclick=function(){saveAdm();toast('Casting femme sauvegardé')};
+  }
+  else if(admTab==='man'){
+    var M=st.adm.man;
+    c.innerHTML='<div class="arow"><label>Activer le personnage homme</label><input type="checkbox" id="mOn"'+(M.enabled?' checked':'')+'></div>'+
+    '<div class="f"><label>Description personnalisée (si remplie, remplace le tirage aléatoire)</label><textarea id="mC" style="min-height:60px">'+esc(M.custom)+'</textarea><div class="hint">Ex : un homme barbu en costume three-piece, regard confiant.</div></div>'+
+    '<div class="f"><label>🌍 Ethnies (clique pour supprimer)</label><div class="chips" id="mEth"></div><div class="chipadd"><input type="text" id="mEthNew" placeholder="Ajouter une ethnie"><button id="mEthAdd">+ Ajouter</button></div></div>'+
+    '<div class="f"><label>💇 Cheveux (clique pour supprimer)</label><div class="chips" id="mHair"></div><div class="chipadd"><input type="text" id="mHairNew" placeholder="Ajouter une coupe"><button id="mHairAdd">+ Ajouter</button></div></div>'+
+    '<button class="btn pri" id="saveM">💾 Sauvegarder le casting homme</button>';
+    renderChips('mEth',M.ethnicities);renderChips('mHair',M.hairs);
+    $('mOn').onchange=function(e){M.enabled=e.target.checked};
+    $('mC').oninput=function(e){M.custom=e.target.value};
+    $('mEthAdd').onclick=function(){var v=$('mEthNew').value.trim();if(v&&M.ethnicities.indexOf(v)<0){M.ethnicities.push(v);renderChips('mEth',M.ethnicities);$('mEthNew').value=''}};
+    $('mHairAdd').onclick=function(){var v=$('mHairNew').value.trim();if(v&&M.hairs.indexOf(v)<0){M.hairs.push(v);renderChips('mHair',M.hairs);$('mHairNew').value=''}};
+    $('saveM').onclick=function(){saveAdm();toast('Casting homme sauvegardé')};
+  }
+  else if(admTab==='texts'){
+    var T=st.adm.texts;
+    c.innerHTML='<div class="f"><label>Texte sur t-shirt / badge</label><input type="text" id="tS" value="'+esc(T.shirt)+'"></div>'+
+    '<div class="f"><label>Texte sur bannière (mode Décor)</label><input type="text" id="tB" value="'+esc(T.banner)+'"></div>'+
+    '<div class="f"><label>Texte sur chapeau</label><input type="text" id="tH" value="'+esc(T.hat)+'"></div>'+
+    '<button class="btn pri" id="saveT">💾 Sauvegarder les textes</button>';
+    $('saveT').onclick=function(){
+      T.shirt=$('tS').value.trim()||'VOTEZ LFI';
+      T.banner=$('tB').value.trim()||'VOTEZ LFI';
+      T.hat=$('tH').value.trim()||'VOTEZ LFI';
+      saveAdm();toast('Textes sauvegardés');
+    };
+  }
+  else if(admTab==='db'){
+    var cc={};st.db.forEach(function(s){cc[s.cat]=(cc[s.cat]||0)+1});
+    var stats=Object.keys(CATS).map(function(k){return'<div class="arow"><label>'+CATS[k].i+' '+CATS[k].n+'</label><b style="font-family:var(--mono)">'+(cc[k]||0)+'</b></div>'}).join('');
+    c.innerHTML='<div class="f"><label>📊 Base de styles</label><p style="font-size:12.5px;color:var(--mut);line-height:1.5">'+st.db.length+' styles · '+Object.keys(CATS).length+' catégories.</p>'+stats+'</div>'+
+    '<div class="brow"><button class="btn" id="extendAll">🧠 Étendre par IA</button><button class="btn" id="expDb">📤 Exporter</button></div>'+
+    '<div class="brow" style="margin-top:8px"><button class="btn" id="impDb">📥 Importer</button><button class="btn dng" id="rstDb">↻ Reset base</button></div>';
+    $('extendAll').onclick=extendDb;
+    $('expDb').onclick=function(){
+      var b=new Blob([JSON.stringify(st.db,null,2)],{type:'application/json'});
+      var u=URL.createObjectURL(b);
+      var a=document.createElement('a');a.href=u;a.download='styleforge-db.json';a.rel='noopener';
+      document.body.appendChild(a);a.click();a.remove();
+      setTimeout(function(){URL.revokeObjectURL(u)},8000);
+    };
+    $('impDb').onclick=function(){
+      var i=document.createElement('input');i.type='file';i.accept='.json';
+      i.onchange=function(e){
+        var f=e.target.files[0];if(!f)return;
+        f.text().then(function(t){
+          try{
+            var arr=JSON.parse(t);
+            if(Array.isArray(arr)&&arr.length){st.db=arr;st.usedStyles={};saveLS(LS.db,st.db);toast(arr.length+' styles importés');renderAdm()}
+          }catch(err){toast('Fichier invalide','err')}
+        });
+      };
+      i.click();
+    };
+    $('rstDb').onclick=function(){
+      st.db=BASE.map(function(a){return{id:a[0],cat:a[1],name:a[2],prompt:a[3]}});
+      st.usedStyles={};saveLS(LS.db,st.db);
+      toast('Base réinitialisée','warn');renderAdm();
+    };
+  }
+  else if(admTab==='data'){
+    c.innerHTML='<div class="f"><label>💾 Données stockées dans ce navigateur</label>'+
+    '<p style="font-size:12.5px;color:var(--mut);line-height:1.55;margin-bottom:10px">Les images et les séries sont dans IndexedDB, les réglages dans localStorage. Tout survit à la fermeture de Chrome.</p>'+
+    '<div class="arow"><label>Images enregistrées</label><b id="dImgs">…</b></div>'+
+    '<div class="arow"><label>Séries</label><b id="dSeries">…</b></div>'+
+    '<div class="arow"><label>Estimation stockage</label><b id="dSize">…</b></div></div>'+
+    '<button class="btn dng" id="wipeAll">🗑 Tout effacer (images + séries)</button>';
+    idbGetAll('images').then(function(a){
+      $('dImgs').textContent=a.length;
+      var bytes=0;
+      a.forEach(function(r){if(r.blob)bytes+=r.blob.size});
+      $('dSize').textContent=(bytes/1048576).toFixed(1)+' Mo';
+    });
+    idbGetAll('series').then(function(a){$('dSeries').textContent=a.length});
+    $('wipeAll').onclick=function(){
+      if(!confirm('Effacer TOUTES les images et séries enregistrées ?'))return;
+      Promise.all([idbGetAll('images'),idbGetAll('series')]).then(function(r){
+        var ops=[];
+        r[0].forEach(function(x){ops.push(idbDel('images',x.id))});
+        r[1].forEach(function(x){ops.push(idbDel('series',x.id))});
+        return Promise.all(ops);
+      }).then(function(){
+        st.series=[];st.curSeries=-1;st.allItems=[];st.domIds=[];
+        $('stream').innerHTML='';$('empty').style.display='block';$('seriesBar').style.display='none';
+        renderTabs();updateBar();
+        toast('Données effacées','warn');
+      });
+    };
+  }
+}
+function extendDb(){
+  if(!anyKey())return toast('Ajoute des clés d\'abord','warn');
+  toast('Extension IA en cours…');
+  var cats=Object.keys(CATS);
+  Promise.allSettled(cats.map(function(cat){
+    var existing=st.db.filter(function(s){return s.cat===cat}).map(function(s){return s.name}).join(', ');
+    return callText([
+      {role:'system',content:'Art director. Return ONLY valid JSON, no markdown.'},
+      {role:'user',content:'Generate 3 NEW distinct visual art styles for category "'+cat+'". AVOID: '+existing+'. Return JSON: {"styles":[{"name":"max 40 chars","prompt":"English 40-80 words: colors, lighting, technique, mood"}]}'}
+    ],6000,900).then(function(c){
+      var j=parseJson(c);if(!j||!Array.isArray(j.styles))return;
+      var n=0;
+      j.styles.forEach(function(s){
+        if(!s.name||!s.prompt)return;
+        if(st.db.some(function(x){return x.name.toLowerCase()===String(s.name).toLowerCase()}))return;
+        st.db.push({id:'ai-'+cat+'-'+Date.now()+'-'+n,cat:cat,name:String(s.name).slice(0,50),prompt:String(s.prompt).slice(0,700),ai:true});
+        n++;
+      });
+      if(n)log('+'+n+' styles IA "'+cat+'"','s');
+    });
+  })).then(function(){
+    saveLS(LS.db,st.db);
+    toast('Base étendue : '+st.db.length+' styles');
+    renderAdm();
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════════════════ */
+(function init(){
+  loadAll();
+  renderDrop();
+
+  var t=null;
+  $('keysIn').addEventListener('input',function(){clearTimeout(t);t=setTimeout(function(){autoSaveKeys(false)},600)});
+  $('keysIn').addEventListener('blur',function(){clearTimeout(t);autoSaveKeys(true)});
+  if(st.keys.length)renderKeys();
+
+  $('batchSeg').querySelectorAll('button').forEach(function(b){b.classList.toggle('on',b.dataset.v===String(st.batch))});
+  $('divSeg').querySelectorAll('button').forEach(function(b){b.classList.toggle('on',b.dataset.v===String(st.comboP))});
+  $('ratio').value=st.ratioMode;
+  $('sizeSel').value=st.size;
+  $('compSel').value=String(st.comp);
+  $('spaceSel').value=String(st.spaceP);
+  $('txtSel').value=st.txtMode;
+  $('wPerKey').value=st.wPerKey;
+  $('interval').value=st.interval;
+
+  function seg(id,cb){
+    var el=$(id);
+    el.querySelectorAll('button').forEach(function(b){
+      b.onclick=function(){
+        el.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
+        b.classList.add('on');cb(b.dataset.v);saveCfg();renderKeys();
+      };
+    });
+  }
+  seg('batchSeg',function(v){st.batch=parseInt(v)});
+  seg('divSeg',function(v){st.comboP=parseFloat(v)});
+  $('ratio').onchange=function(e){st.ratioMode=e.target.value;saveCfg()};
+  $('sizeSel').onchange=function(e){st.size=e.target.value;saveCfg();renderKeys()};
+  $('compSel').onchange=function(e){st.comp=e.target.value;saveCfg()};
+  $('spaceSel').onchange=function(e){st.spaceP=parseFloat(e.target.value);saveCfg()};
+  $('txtSel').onchange=function(e){st.txtMode=e.target.value;saveCfg()};
+  $('wPerKey').onchange=function(e){st.wPerKey=Math.max(1,Math.min(4,parseInt(e.target.value)||2));e.target.value=st.wPerKey;saveCfg();renderKeys()};
+  $('interval').onchange=function(e){st.interval=Math.max(500,Math.min(20000,parseInt(e.target.value)||3000));e.target.value=st.interval;saveCfg();renderKeys()};
+
+  $('startBtn').onclick=launchSeries;
+  $('playBtn').onclick=launchSeries;
+  $('pauseBtn').onclick=function(){st.paused=!st.paused;toast(st.paused?'Pause':'Reprise');updateBar()};
+  $('nextBatchBtn').onclick=launchSeries;
+  $('histBtn').onclick=openHist;
+  $('histX').onclick=function(){$('histM').classList.remove('on')};
+  $('adminBtn').onclick=openAdm;
+  $('admX').onclick=function(){$('admM').classList.remove('on')};
+  document.querySelectorAll('.mtab').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('.mtab').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');admTab=b.dataset.t;renderAdm();
+    };
+  });
+
+  renderKeys();
+  updateStart();
+  updateBar();
+  log('Style Forge v2 prêt','s');
+  log(st.db.length+' styles · '+st.keys.length+' clé(s) · stockage IndexedDB');
+
+  // restauration de la photo + des séries depuis IndexedDB
+  idbGet('kv','photo').then(function(uri){
+    if(uri){st.img=uri;renderDrop();updateStart();log('Photo restaurée','s')}
+  }).catch(function(){});
+  restoreSession().then(function(){
+    updateBar();
+  });
+})();
+</script>
+</body>
+</html>
